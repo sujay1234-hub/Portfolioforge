@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PortfolioForge — Professional Developer Portfolios in 24 Hours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root{
+  --bg:#0d0f14;
+  --bg2:#12151c;
+  --bg3:#181b24;
+  --surface:#1e2230;
+  --border:#252a38;
+  --green:#00e87a;
+  --green-dim:rgba(0,232,122,.12);
+  --green-glow:rgba(0,232,122,.25);
+  --text:#eef0f6;
+  --text2:#9aa0b8;
+  --text3:#5a6080;
+  --white:#ffffff;
+  --red:#ff4757;
+  --yellow:#ffd32a;
+  --font-display:'Bebas Neue',sans-serif;
+  --font-body:'Manrope',sans-serif;
+  --font-mono:'Fira Code',monospace;
+  --r:6px;
+  --r-lg:14px;
+  --shadow:0 8px 40px rgba(0,0,0,.45);
+}
+[data-theme="light"]{
+  --bg:#f0f2f8;
+  --bg2:#e8eaf2;
+  --bg3:#f8f9fc;
+  --surface:#ffffff;
+  --border:#d8dce8;
+  --text:#0d0f14;
+  --text2:#4a5070;
+  --text3:#8a90a8;
+}
+
+/* ═══════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--font-body);font-size:16px;line-height:1.6;
+  overflow-x:hidden;transition:background .3s,color .3s;
+}
+::selection{background:var(--green);color:#000}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--green);border-radius:2px}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ═══════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════ */
+#dot{position:fixed;width:8px;height:8px;background:var(--green);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s}
+#ring{position:fixed;width:32px;height:32px;border:1.5px solid var(--green);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.4;transition:opacity .2s}
+@media(hover:none){#dot,#ring{display:none}}
+
+/* ═══════════════════════════════════════════
+   LOADING SCREEN
+═══════════════════════════════════════════ */
+#loader{
+  position:fixed;inset:0;background:var(--bg);z-index:9000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;
+  transition:opacity .5s,visibility .5s;
+}
+#loader.gone{opacity:0;visibility:hidden}
+.loader-logo{font-family:var(--font-display);font-size:3rem;color:var(--text);letter-spacing:.05em}
+.loader-logo span{color:var(--green)}
+.loader-bar-wrap{width:200px;height:2px;background:var(--border);border-radius:1px;overflow:hidden}
+.loader-bar{height:100%;width:0%;background:var(--green);border-radius:1px;animation:loadBar 1.6s ease forwards}
+.loader-pct{font-family:var(--font-mono);font-size:.78rem;color:var(--text3)}
+@keyframes loadBar{0%{width:0}60%{width:75%}100%{width:100%}}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:400;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 4vw;height:64px;
+  background:rgba(13,15,20,.85);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  transition:background .3s;
+}
+[data-theme="light"] nav{background:rgba(240,242,248,.9)}
+.nav-logo{
+  font-family:var(--font-display);font-size:1.6rem;letter-spacing:.06em;
+  display:flex;align-items:center;gap:.4rem;
+}
+.nav-logo .g{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{font-size:.82rem;font-weight:600;color:var(--text2);letter-spacing:.04em;transition:color .2s}
+.nav-links a:hover{color:var(--green)}
+.nav-actions{display:flex;align-items:center;gap:.75rem}
+.theme-btn{
+  width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:.9rem;transition:border-color .2s;
+}
+.theme-btn:hover{border-color:var(--green)}
+.nav-cta{
+  background:var(--green);color:#000;padding:.5rem 1.3rem;border-radius:var(--r);
+  font-size:.8rem;font-weight:800;letter-spacing:.04em;transition:opacity .2s,transform .2s;
+}
+.nav-cta:hover{opacity:.85;transform:translateY(-1px)}
+.ham-btn{display:none;flex-direction:column;gap:4.5px;cursor:pointer;padding:4px;background:none;border:none}
+.ham-btn span{display:block;width:20px;height:1.5px;background:var(--text);border-radius:1px;transition:.3s}
+@media(max-width:860px){.nav-links{display:none}.ham-btn{display:flex}}
+
+/* mobile menu */
+.mob-menu{
+  position:fixed;inset:0;top:64px;background:var(--bg);z-index:399;
+  display:none;flex-direction:column;gap:0;padding:1rem 4vw;
+  border-top:1px solid var(--border);
+}
+.mob-menu.show{display:flex}
+.mob-menu a{
+  padding:1.1rem 0;font-size:1.05rem;font-weight:600;color:var(--text);
+  border-bottom:1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════════
+   STICKY ORDER BAR
+═══════════════════════════════════════════ */
+#sticky-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:300;
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:.85rem 4vw;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  transform:translateY(100%);transition:transform .35s ease;
+  flex-wrap:wrap;
+}
+#sticky-bar.visible{transform:translateY(0)}
+.sticky-text{font-size:.88rem;font-weight:600;color:var(--text2)}
+.sticky-text strong{color:var(--text)}
+.sticky-actions{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.sticky-plan{
+  font-family:var(--font-mono);font-size:.75rem;color:var(--text3);
+  background:var(--surface);border:1px solid var(--border);
+  padding:.3rem .7rem;border-radius:var(--r);
+}
+.sticky-cta{
+  background:var(--green);color:#000;padding:.5rem 1.5rem;border-radius:var(--r);
+  font-size:.82rem;font-weight:800;
+}
+
+/* ═══════════════════════════════════════════
+   FLOATING WHATSAPP
+═══════════════════════════════════════════ */
+.wa-fab{
+  position:fixed;bottom:80px;right:2rem;z-index:300;
+  width:52px;height:52px;border-radius:50%;
+  background:#25d366;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(37,211,102,.4);
+  transition:transform .2s;
+}
+.wa-fab:hover{transform:scale(1.1)}
+.wa-fab svg{width:26px;height:26px;fill:#fff}
+.wa-pulse{
+  position:absolute;inset:-4px;border-radius:50%;
+  border:2px solid #25d366;opacity:0;
+  animation:waPulse 2s ease-out infinite;
+}
+@keyframes waPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.5);opacity:0}}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero{
+  min-height:100vh;padding:100px 4vw 4rem;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+  border-bottom:1px solid var(--border);
+}
+.hero-grid-bg{
+  position:absolute;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(0,232,122,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,232,122,.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%);
+}
+.hero-glow{
+  position:absolute;top:-100px;left:50%;transform:translateX(-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,232,122,.08) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+.hero-content{position:relative;z-index:1;max-width:900px}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:var(--green-dim);border:1px solid rgba(0,232,122,.2);
+  padding:.3rem 1rem;border-radius:100px;
+  font-family:var(--font-mono);font-size:.72rem;color:var(--green);
+  letter-spacing:.05em;margin-bottom:2rem;
+}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.4s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+h1.hero-headline{
+  font-family:var(--font-display);
+  font-size:clamp(4rem,9vw,9rem);
+  line-height:.92;letter-spacing:.02em;
+  color:var(--text);
+}
+h1.hero-headline .accent{
+  color:var(--green);
+  display:inline-block;
+}
+h1.hero-headline .outline{
+  -webkit-text-stroke:1.5px var(--text);
+  color:transparent;
+}
+.hero-sub{
+  margin-top:1.75rem;max-width:560px;
+  font-size:1.05rem;font-weight:300;color:var(--text2);line-height:1.75;
+}
+.hero-sub strong{color:var(--text);font-weight:700}
+.hero-ctas{display:flex;align-items:center;gap:1.25rem;margin-top:2.5rem;flex-wrap:wrap}
+.btn-green{
+  background:var(--green);color:#000;
+  padding:.9rem 2.5rem;border-radius:var(--r);
+  font-size:.9rem;font-weight:800;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:.5rem;
+  transition:box-shadow .2s,transform .2s;
+  border:none;cursor:pointer;
+}
+.btn-green:hover{box-shadow:0 0 30px var(--green-glow);transform:translateY(-2px)}
+.btn-ghost{
+  background:transparent;border:1px solid var(--border);color:var(--text2);
+  padding:.9rem 2rem;border-radius:var(--r);
+  font-size:.9rem;font-weight:600;
+  transition:border-color .2s,color .2s;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;
+}
+.btn-ghost:hover{border-color:var(--green);color:var(--green)}
+
+/* hero stats ticker */
+.hero-stats{
+  display:flex;gap:3rem;margin-top:4rem;padding-top:2.5rem;
+  border-top:1px solid var(--border);flex-wrap:wrap;
+}
+.hstat-num{
+  font-family:var(--font-display);font-size:2.8rem;line-height:1;
+  color:var(--green);letter-spacing:.04em;
+}
+.hstat-label{font-size:.78rem;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:.25rem}
+
+/* trust badges */
+.trust-row{
+  display:flex;align-items:center;gap:1.5rem;margin-top:2.5rem;flex-wrap:wrap;
+}
+.trust-badge{
+  display:flex;align-items:center;gap:.45rem;
+  font-size:.78rem;font-weight:600;color:var(--text3);
+}
+.trust-badge .icon{font-size:.95rem}
+
+/* ═══════════════════════════════════════════
+   TICKER
+═══════════════════════════════════════════ */
+.ticker{
+  background:var(--green);overflow:hidden;padding:.7rem 0;
+  display:flex;gap:0;
+}
+.ticker-track{
+  display:flex;gap:2.5rem;white-space:nowrap;flex-shrink:0;padding-right:2.5rem;
+  animation:tick 18s linear infinite;
+}
+.ticker-track span{
+  font-family:var(--font-mono);font-size:.75rem;font-weight:500;color:#000;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.ticker-track .sep{opacity:.4}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ═══════════════════════════════════════════
+   SECTION COMMONS
+═══════════════════════════════════════════ */
+.sec{padding:6rem 4vw}
+.sec-tag{
+  font-family:var(--font-mono);font-size:.7rem;color:var(--green);
+  letter-spacing:.15em;text-transform:uppercase;margin-bottom:.75rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.sec-tag::before{content:'//';opacity:.5}
+.sec-h{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,4.5vw,4.5rem);
+  letter-spacing:.04em;line-height:.95;color:var(--text);
+}
+.sec-h .g{color:var(--green)}
+.sec-sub{font-size:.95rem;font-weight:300;color:var(--text2);max-width:520px;line-height:1.75;margin-top:.75rem}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(32px);transition:opacity .65s ease,transform .65s ease}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+
+/* ═══════════════════════════════════════════
+   PLAN QUIZ
+═══════════════════════════════════════════ */
+.quiz-sec{background:var(--bg2);border-bottom:1px solid var(--border)}
+.quiz-card{
+  max-width:700px;margin:2.5rem auto 0;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  overflow:hidden;
+}
+.quiz-header{
+  background:var(--green);padding:1.25rem 2rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.quiz-header h3{font-family:var(--font-display);font-size:1.5rem;letter-spacing:.04em;color:#000}
+.quiz-header p{font-size:.82rem;color:rgba(0,0,0,.6);margin-top:.15rem}
+.quiz-body{padding:2rem}
+.quiz-progress{height:3px;background:var(--border);border-radius:2px;margin-bottom:2rem;overflow:hidden}
+.quiz-progress-bar{height:100%;background:var(--green);border-radius:2px;transition:width .4s ease;width:25%}
+.quiz-step{display:none}
+.quiz-step.active{display:block}
+.quiz-q{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:1.25rem}
+.quiz-options{display:flex;flex-direction:column;gap:.6rem}
+.quiz-opt{
+  display:flex;align-items:center;gap.75rem;padding:1rem 1.25rem;
+  background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);
+  cursor:pointer;transition:border-color .2s,background .2s;
+  gap:.85rem;
+}
+.quiz-opt:hover{border-color:var(--green);background:var(--green-dim)}
+.quiz-opt input{accent-color:var(--green);width:16px;height:16px;flex-shrink:0}
+.quiz-opt-text{font-size:.9rem;font-weight:500;color:var(--text2)}
+.quiz-opt:hover .quiz-opt-text{color:var(--text)}
+.quiz-nav{display:flex;justify-content:space-between;margin-top:1.75rem;align-items:center}
+.quiz-back{background:none;border:1px solid var(--border);color:var(--text2);padding:.55rem 1.25rem;border-radius:var(--r);font-size:.82rem;font-weight:600;cursor:pointer;transition:border-color .2s}
+.quiz-next{background:var(--green);color:#000;padding:.6rem 1.5rem;border-radius:var(--r);font-size:.82rem;font-weight:800;border:none;cursor:pointer;transition:opacity .2s}
+.quiz-result{display:none;text-align:center;padding:.5rem 0}
+.quiz-result-plan{font-family:var(--font-display);font-size:3rem;color:var(--green);letter-spacing:.05em;line-height:1}
+.quiz-result-desc{font-size:.9rem;color:var(--text2);margin:.75rem 0 1.5rem;line-height:1.65}
+
+/* ═══════════════════════════════════════════
+   PRICING CALCULATOR
+═══════════════════════════════════════════ */
+.calc-sec{background:var(--bg);border-bottom:1px solid var(--border)}
+.calc-layout{display:grid;grid-template-columns:1.2fr 1fr;gap:3rem;margin-top:3rem;align-items:start}
+@media(max-width:860px){.calc-layout{grid-template-columns:1fr}}
+.calc-addons{display:flex;flex-direction:column;gap:.75rem;margin-top:1.5rem}
+.addon-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);transition:border-color .2s;cursor:pointer;
+}
+.addon-row:hover{border-color:var(--green)}
+.addon-row.active{border-color:var(--green);background:var(--green-dim)}
+.addon-left{display:flex;align-items:center;gap:.75rem}
+.addon-icon{font-size:1.15rem;width:32px;text-align:center}
+.addon-name{font-size:.9rem;font-weight:600;color:var(--text)}
+.addon-desc{font-size:.75rem;color:var(--text3);margin-top:.1rem}
+.addon-price{font-family:var(--font-mono);font-size:.9rem;color:var(--green);font-weight:500}
+.toggle-sw{
+  width:40px;height:22px;background:var(--border);border-radius:11px;
+  position:relative;flex-shrink:0;transition:background .2s;
+}
+.toggle-sw::after{
+  content:'';position:absolute;top:3px;left:3px;
+  width:16px;height:16px;border-radius:50%;background:var(--text3);
+  transition:transform .2s,background .2s;
+}
+.addon-row.active .toggle-sw{background:var(--green)}
+.addon-row.active .toggle-sw::after{transform:translateX(18px);background:#000}
+
+.calc-summary{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:2rem;position:sticky;top:80px;
+}
+.calc-summary h4{font-family:var(--font-display);font-size:1.5rem;letter-spacing:.04em;color:var(--text);margin-bottom:1.5rem}
+.summary-lines{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.5rem}
+.summary-line{display:flex;justify-content:space-between;align-items:center;font-size:.88rem}
+.summary-line .label{color:var(--text2)}
+.summary-line .val{font-family:var(--font-mono);color:var(--text);font-size:.85rem}
+.summary-line .val.strike{text-decoration:line-through;color:var(--text3)}
+.summary-divider{height:1px;background:var(--border);margin:1rem 0}
+.summary-total{display:flex;justify-content:space-between;align-items:baseline}
+.summary-total .tl{font-size:.85rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.summary-total .tv{font-family:var(--font-display);font-size:2.8rem;color:var(--green);line-height:1}
+.summary-del{font-size:.75rem;color:var(--text3);margin-top:.35rem;font-family:var(--font-mono)}
+.base-selector{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.75rem}
+.base-option{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.8rem 1rem;background:var(--bg);border:1.5px solid var(--border);
+  border-radius:var(--r);cursor:pointer;transition:border-color .2s;
+}
+.base-option.sel{border-color:var(--green);background:var(--green-dim)}
+.base-option-name{font-size:.88rem;font-weight:700;color:var(--text)}
+.base-option-price{font-family:var(--font-mono);font-size:.88rem;color:var(--green)}
+.base-label{font-size:.75rem;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+
+/* ═══════════════════════════════════════════
+   COMPARISON TABLE
+═══════════════════════════════════════════ */
+.compare-sec{background:var(--bg2);border-bottom:1px solid var(--border)}
+.compare-table{width:100%;border-collapse:collapse;margin-top:3rem;font-size:.88rem}
+.compare-table th{
+  padding:1.25rem 1.5rem;text-align:center;font-family:var(--font-display);
+  font-size:1.2rem;letter-spacing:.04em;border-bottom:2px solid var(--border);
+  border-right:1px solid var(--border);color:var(--text);
+}
+.compare-table th:first-child{text-align:left;font-size:.78rem;font-weight:600;letter-spacing:.1em;color:var(--text3);text-transform:uppercase}
+.compare-table th.featured-col{color:var(--green);border-bottom-color:var(--green)}
+.compare-table td{
+  padding:1rem 1.5rem;text-align:center;
+  border-bottom:1px solid var(--border);border-right:1px solid var(--border);
+  color:var(--text2);
+}
+.compare-table td:first-child{text-align:left;color:var(--text);font-weight:500}
+.compare-table td.featured-col{background:rgba(0,232,122,.04)}
+.compare-table tr:hover td{background:var(--surface)}
+.compare-table tr:hover td.featured-col{background:rgba(0,232,122,.07)}
+.tick{color:var(--green);font-size:1rem}
+.cross{color:var(--text3);font-size:.85rem}
+.partial{color:var(--yellow);font-size:.8rem;font-weight:600}
+.price-row th{padding-top:1.75rem;padding-bottom:1.75rem}
+.cmp-price{font-family:var(--font-mono);font-size:1.5rem;color:var(--green)}
+.cmp-badge{
+  display:inline-block;background:var(--green);color:#000;
+  font-size:.6rem;font-weight:800;padding:.15rem .5rem;border-radius:2px;
+  letter-spacing:.08em;text-transform:uppercase;margin-left:.5rem;vertical-align:middle;
+}
+.compare-wrapper{overflow-x:auto}
+
+/* ═══════════════════════════════════════════
+   DEMOS / PORTFOLIO GALLERY
+═══════════════════════════════════════════ */
+.gallery-sec{background:var(--bg);border-bottom:1px solid var(--border)}
+.gallery-filters{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0}
+.filter-btn{
+  padding:.4rem 1rem;border-radius:100px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--text2);font-size:.78rem;font-weight:600;cursor:pointer;
+  transition:all .2s;letter-spacing:.04em;
+}
+.filter-btn.active{background:var(--green);border-color:var(--green);color:#000}
+.filter-btn:hover:not(.active){border-color:var(--green);color:var(--green)}
+.gallery-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+}
+@media(max-width:900px){.gallery-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.gallery-grid{grid-template-columns:1fr}}
+.gal-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s;
+  cursor:pointer;
+}
+.gal-card:hover{transform:translateY(-6px);border-color:var(--green);box-shadow:0 16px 50px rgba(0,232,122,.1)}
+.gal-preview{height:200px;position:relative;overflow:hidden}
+/* mini browser mockup inside card */
+.browser-bar{
+  height:32px;background:var(--bg3);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 10px;gap:6px;
+}
+.bb-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.bb-url{
+  flex:1;height:16px;background:var(--bg);border-radius:8px;
+  margin-left:6px;max-width:140px;
+}
+.gal-screen{
+  padding:10px;display:flex;flex-direction:column;gap:7px;
+  height:calc(200px - 32px);overflow:hidden;
+}
+.gs-hero{
+  height:60px;border-radius:4px;display:flex;align-items:center;padding:0 10px;gap:8px;
+}
+.gs-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0}
+.gs-lines{flex:1;display:flex;flex-direction:column;gap:4px}
+.gs-line{height:3px;border-radius:2px;background:rgba(255,255,255,.08)}
+.gs-line.w70{width:70%}.gs-line.w50{width:50%}.gs-line.w40{width:40%}
+.gs-cards{display:flex;gap:5px}
+.gs-card{flex:1;height:36px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+.gs-tag{height:14px;width:55px;border-radius:3px}
+/* themes */
+.theme-dev .gs-hero{background:#0a1628}.gs-avatar.dev{background:linear-gradient(135deg,#3b82f6,#8b5cf6)}
+.theme-design .gs-hero{background:#1a0f00}.gs-avatar.des{background:linear-gradient(135deg,#f97316,#ef4444)}
+.theme-minimal .gs-hero{background:#111111}.gs-avatar.min{background:#e5e5e5}
+.theme-creative .gs-hero{background:#0a1a0f}.gs-avatar.cre{background:linear-gradient(135deg,var(--green),#00b8ff)}
+.theme-student .gs-hero{background:#12001a}.gs-avatar.stu{background:linear-gradient(135deg,#a855f7,#ec4899)}
+.theme-startup .gs-hero{background:#1a1000}.gs-avatar.sta{background:linear-gradient(135deg,#fbbf24,#f97316)}
+.gal-info{padding:1.25rem}
+.gal-type{font-family:var(--font-mono);font-size:.68rem;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
+.gal-name{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.gal-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+.gal-tag{font-size:.7rem;color:var(--text3);background:var(--bg);border:1px solid var(--border);padding:.15rem .55rem;border-radius:4px}
+.gal-card[data-hidden]{display:none}
+
+/* ═══════════════════════════════════════════
+   TIMELINE DELIVERY
+═══════════════════════════════════════════ */
+.timeline-sec{background:var(--bg2);border-bottom:1px solid var(--border)}
+.timeline{
+  position:relative;max-width:700px;margin:3rem auto 0;
+  padding-left:2rem;
+}
+.timeline::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:2px;background:linear-gradient(var(--green),var(--border));
+  border-radius:1px;
+}
+.tl-item{
+  position:relative;padding:0 0 2.5rem 2rem;
+}
+.tl-dot{
+  position:absolute;left:-2.55rem;top:.2rem;
+  width:16px;height:16px;border-radius:50%;border:2px solid var(--green);
+  background:var(--bg);z-index:1;
+}
+.tl-dot.done{background:var(--green)}
+.tl-time{font-family:var(--font-mono);font-size:.7rem;color:var(--green);letter-spacing:.1em;margin-bottom:.25rem}
+.tl-title{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+.tl-desc{font-size:.87rem;color:var(--text2);line-height:1.65;font-weight:300}
+
+/* ═══════════════════════════════════════════
+   FAQ
+═══════════════════════════════════════════ */
+.faq-sec{background:var(--bg);border-bottom:1px solid var(--border)}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:3rem;max-width:1000px}
+@media(max-width:760px){.faq-grid{grid-template-columns:1fr}}
+.faq-item{
+  border:1px solid var(--border);margin:-1px 0 0 -1px;
+  transition:background .2s;
+}
+.faq-item:hover{background:var(--surface)}
+.faq-q{
+  padding:1.35rem 1.5rem;font-size:.92rem;font-weight:700;color:var(--text);
+  cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;
+  user-select:none;
+}
+.faq-icon{
+  width:26px;height:26px;border-radius:50%;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:.8rem;color:var(--text3);transition:transform .3s,border-color .3s,color .3s;
+}
+.faq-item.open .faq-icon{transform:rotate(45deg);border-color:var(--green);color:var(--green)}
+.faq-a{
+  max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;
+  font-size:.86rem;color:var(--text2);line-height:1.7;font-weight:300;
+  padding:0 1.5rem;
+}
+.faq-item.open .faq-a{max-height:200px;padding:0 1.5rem 1.35rem}
+
+/* ═══════════════════════════════════════════
+   FOUNDER
+═══════════════════════════════════════════ */
+.founder-sec{background:var(--bg2);border-bottom:1px solid var(--border)}
+.founder-card{
+  display:grid;grid-template-columns:auto 1fr;gap:3rem;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:2.5rem;margin-top:3rem;max-width:860px;align-items:center;
+}
+@media(max-width:700px){.founder-card{grid-template-columns:1fr;gap:1.5rem}}
+.f-avatar{
+  width:130px;height:130px;border-radius:var(--r-lg);
+  background:linear-gradient(135deg,var(--green),#00b8ff);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:3.5rem;color:#000;
+  flex-shrink:0;letter-spacing:.05em;
+}
+.f-name{font-family:var(--font-display);font-size:2rem;letter-spacing:.05em;color:var(--text)}
+.f-role{font-family:var(--font-mono);font-size:.75rem;color:var(--green);margin:.3rem 0 .9rem;letter-spacing:.06em}
+.f-bio{font-size:.9rem;color:var(--text2);line-height:1.75;font-weight:300;margin-bottom:1.25rem}
+.f-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.25rem}
+.f-chip{
+  font-family:var(--font-mono);font-size:.7rem;
+  background:var(--bg);border:1px solid var(--border);color:var(--text3);
+  padding:.2rem .7rem;border-radius:4px;letter-spacing:.04em;
+}
+.f-links{display:flex;gap:.6rem}
+.f-link{
+  display:inline-flex;align-items:center;gap:.4rem;font-size:.8rem;font-weight:700;
+  padding:.45rem 1rem;border-radius:var(--r);border:1px solid var(--border);color:var(--text2);
+  transition:border-color .2s,color .2s;
+}
+.f-link:hover{border-color:var(--green);color:var(--green)}
+
+/* ═══════════════════════════════════════════
+   TESTIMONIALS
+═══════════════════════════════════════════ */
+.testi-sec{background:var(--bg);border-bottom:1px solid var(--border)}
+.testi-scroll{
+  display:flex;gap:1.25rem;overflow-x:auto;padding:2rem 0 1.5rem;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x mandatory;
+}
+.testi-scroll::-webkit-scrollbar{height:3px}
+.testi-scroll::-webkit-scrollbar-track{background:transparent}
+.testi-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.t-card{
+  min-width:310px;max-width:310px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:1.75rem;scroll-snap-align:start;flex-shrink:0;
+  transition:border-color .25s;
+}
+.t-card:hover{border-color:var(--green)}
+.t-stars{color:var(--green);font-size:.8rem;letter-spacing:.15em;margin-bottom:.9rem}
+.t-quote{font-size:.9rem;color:var(--text2);line-height:1.7;font-style:italic;margin-bottom:1.25rem;font-weight:300}
+.t-sep{width:24px;height:2px;background:var(--green);margin-bottom:.9rem}
+.t-name{font-size:.88rem;font-weight:700;color:var(--text)}
+.t-role{font-size:.75rem;color:var(--text3);margin-top:.15rem}
+.testi-arrows{display:flex;gap:.5rem;margin-top:1.25rem}
+.t-arrow{
+  width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:.9rem;color:var(--text2);transition:border-color .2s,color .2s;
+}
+.t-arrow:hover{border-color:var(--green);color:var(--green)}
+
+/* ═══════════════════════════════════════════
+   ORDER FORM
+═══════════════════════════════════════════ */
+.order-sec{background:var(--bg2);border-bottom:1px solid var(--border)}
+.order-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;margin-top:3rem;align-items:start}
+@media(max-width:900px){.order-layout{grid-template-columns:1fr}}
+.order-sidebar h3{font-family:var(--font-display);font-size:2rem;color:var(--text);letter-spacing:.05em;line-height:1.1;margin-bottom:1rem}
+.order-sidebar p{font-size:.88rem;color:var(--text2);line-height:1.75;font-weight:300;margin-bottom:1.75rem}
+.guarantee-boxes{display:flex;flex-direction:column;gap:.6rem}
+.gbox{
+  display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+}
+.gbox-icon{font-size:1.1rem;width:32px;text-align:center;flex-shrink:0}
+.gbox-text{font-size:.83rem;color:var(--text2);font-weight:300;line-height:1.45}
+.gbox-text strong{color:var(--text);font-weight:700}
+
+.order-form{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  overflow:hidden;
+}
+.form-head{
+  background:var(--green);padding:1.1rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.form-head span{font-family:var(--font-display);font-size:1.35rem;letter-spacing:.04em;color:#000}
+.form-head small{font-family:var(--font-mono);font-size:.7rem;color:rgba(0,0,0,.55)}
+.form-body{padding:1.75rem;display:flex;flex-direction:column;gap:.9rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+@media(max-width:560px){.form-row{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:.35rem}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-family:var(--font-mono);font-size:.65rem;color:var(--text3);letter-spacing:.12em;text-transform:uppercase}
+.form-group input,
+.form-group select,
+.form-group textarea{
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--r);
+  padding:.7rem .9rem;color:var(--text);
+  font-family:var(--font-body);font-size:.9rem;font-weight:400;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,232,122,.08)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--text3)}
+.form-group select option{background:var(--bg2)}
+.form-group textarea{resize:vertical;min-height:85px}
+.form-footer{padding:1.25rem 1.75rem;background:var(--bg);border-top:1px solid var(--border)}
+.submit-btn{
+  width:100%;padding:1rem;background:var(--green);color:#000;border:none;
+  border-radius:var(--r);font-family:var(--font-body);font-weight:800;font-size:1rem;
+  letter-spacing:.04em;cursor:pointer;transition:opacity .2s,transform .2s;
+}
+.submit-btn:hover{opacity:.85;transform:translateY(-1px)}
+.pay-note{
+  margin-top:.85rem;font-size:.78rem;color:var(--text3);
+  display:flex;align-items:flex-start;gap:.4rem;line-height:1.55;
+}
+.pay-note::before{content:'ℹ';color:var(--green);flex-shrink:0;margin-top:.05rem}
+.success-panel{
+  display:none;padding:3rem 2rem;text-align:center;
+}
+.sp-icon{font-size:3rem;margin-bottom:1rem}
+.sp-title{font-family:var(--font-display);font-size:2.2rem;color:var(--green);letter-spacing:.05em;margin-bottom:.6rem}
+.sp-text{font-size:.9rem;color:var(--text2);line-height:1.7}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:4rem 4vw 2rem}
+.footer-grid{
+  display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:3rem;
+  padding-bottom:3rem;border-bottom:1px solid var(--border);margin-bottom:2rem;
+}
+@media(max-width:860px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.footer-grid{grid-template-columns:1fr}}
+.f-brand-name{font-family:var(--font-display);font-size:1.8rem;letter-spacing:.06em;color:var(--text);margin-bottom:.5rem}
+.f-brand-name span{color:var(--green)}
+.f-brand-text{font-size:.83rem;color:var(--text3);line-height:1.65;max-width:220px;font-weight:300;margin-bottom:1.25rem}
+.f-socials{display:flex;gap:.5rem}
+.f-soc{
+  width:34px;height:34px;border-radius:var(--r);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text3);transition:border-color .2s,color .2s;
+}
+.f-soc:hover{border-color:var(--green);color:var(--green)}
+.fc-title{font-family:var(--font-mono);font-size:.65rem;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1rem}
+.fc-links{display:flex;flex-direction:column;gap:.55rem}
+.fc-links a{font-size:.85rem;color:var(--text2);font-weight:300;transition:color .2s}
+.fc-links a:hover{color:var(--green)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem}
+.footer-copy{font-size:.77rem;color:var(--text3)}
+.footer-copy a{color:var(--green)}
+.footer-mono{font-family:var(--font-mono);font-size:.7rem;color:var(--text3);opacity:.5}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">Portfolio<span>Forge</span></div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-pct" id="loaderPct">0%</div>
+</div>
+
+<!-- CURSOR -->
+<div id="dot"></div><div id="ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Portfolio<span class="g">Forge</span></a>
+  <div class="nav-links">
+    <a href="#gallery">Portfolio Gallery</a>
+    <a href="#pricing-calc">Pricing</a>
+    <a href="#compare">Compare Plans</a>
+    <a href="#faq">FAQ</a>
+    <a href="#founder">About</a>
+  </div>
+  <div class="nav-actions">
+    <button class="theme-btn" id="themeBtn" title="Toggle theme">🌙</button>
+    <a href="#order" class="nav-cta">Order Now →</a>
+    <button class="ham-btn" id="hamBtn" onclick="toggleMob()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="#gallery" onclick="toggleMob()">Portfolio Gallery</a>
+  <a href="#pricing-calc" onclick="toggleMob()">Pricing</a>
+  <a href="#compare" onclick="toggleMob()">Compare Plans</a>
+  <a href="#faq" onclick="toggleMob()">FAQ</a>
+  <a href="#order" onclick="toggleMob()">Order Now</a>
+</div>
+
+<!-- STICKY BAR -->
+<div id="sticky-bar">
+  <div class="sticky-text"><strong>PortfolioForge</strong> — Get yours delivered in 24h</div>
+  <div class="sticky-actions">
+    <span class="sticky-plan">from ₹99</span>
+    <a href="#order" class="sticky-cta">Order Now →</a>
+  </div>
+</div>
+
+<!-- WHATSAPP FAB -->
+<a href="https://wa.me/919999999999?text=Hi!%20I%20want%20to%20order%20a%20portfolio%20from%20PortfolioForge" target="_blank" class="wa-fab" title="Chat on WhatsApp">
+  <div class="wa-pulse"></div>
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Live — 50+ portfolios delivered</div>
+    <h1 class="hero-headline">
+      LAUNCH YOUR<br/>
+      <span class="accent">DEVELOPER</span><br/>
+      <span class="outline">PORTFOLIO</span>
+    </h1>
+    <p class="hero-sub">
+      Professional portfolio websites built by a developer who knows what recruiters want. Starting at just <strong>₹99.</strong> Delivered in <strong>24 hours.</strong>
+    </p>
+    <div class="hero-ctas">
+      <a href="#order" class="btn-green">Get Your Portfolio <span>→</span></a>
+      <a href="#gallery" class="btn-ghost">See Examples <span>↓</span></a>
+    </div>
+    <div class="trust-row">
+      <div class="trust-badge"><span class="icon">✅</span> 24h Guaranteed</div>
+      <div class="trust-badge"><span class="icon">🔒</span> Secure Payment</div>
+      <div class="trust-badge"><span class="icon">🔄</span> Free Revision</div>
+      <div class="trust-badge"><span class="icon">📦</span> Source Code Included</div>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hstat-num" data-count="50">0</div><div class="hstat-label">Portfolios Built</div></div>
+      <div><div class="hstat-num">24h</div><div class="hstat-label">Delivery Time</div></div>
+      <div><div class="hstat-num" data-count="100">0</div><div class="hstat-label">% Satisfaction</div></div>
+      <div><div class="hstat-num">₹99</div><div class="hstat-label">Starting Price</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Professional Design</span><span class="sep"> ◆ </span>
+    <span>24 Hour Delivery</span><span class="sep"> ◆ </span>
+    <span>Starting ₹99</span><span class="sep"> ◆ </span>
+    <span>Mobile Optimized</span><span class="sep"> ◆ </span>
+    <span>Source Code Included</span><span class="sep"> ◆ </span>
+    <span>Student Built</span><span class="sep"> ◆ </span>
+    <span>Deployment Ready</span><span class="sep"> ◆ </span>
+    <span>Free Revision</span><span class="sep"> ◆ </span>
+    <span>Professional Design</span><span class="sep"> ◆ </span>
+    <span>24 Hour Delivery</span><span class="sep"> ◆ </span>
+    <span>Starting ₹99</span><span class="sep"> ◆ </span>
+    <span>Mobile Optimized</span><span class="sep"> ◆ </span>
+    <span>Source Code Included</span><span class="sep"> ◆ </span>
+    <span>Student Built</span><span class="sep"> ◆ </span>
+    <span>Deployment Ready</span><span class="sep"> ◆ </span>
+    <span>Free Revision</span><span class="sep"> ◆ </span>
+  </div>
+</div>
+
+<!-- ═══ QUIZ ═══ -->
+<section class="quiz-sec sec" id="quiz">
+  <div class="sec-tag rv">00 — Find Your Plan</div>
+  <h2 class="sec-h rv">Not Sure <span class="g">Which Plan?</span></h2>
+  <p class="sec-sub rv">Answer 3 quick questions — we'll tell you exactly which portfolio fits your goals.</p>
+  <div class="quiz-card rv">
+    <div class="quiz-header">
+      <div>
+        <h3>Portfolio Finder Quiz</h3>
+        <p>3 questions · 30 seconds</p>
+      </div>
+    </div>
+    <div class="quiz-body">
+      <div class="quiz-progress"><div class="quiz-progress-bar" id="quizBar"></div></div>
+
+      <div class="quiz-step active" id="qs1">
+        <div class="quiz-q">What's your primary goal for this portfolio?</div>
+        <div class="quiz-options">
+          <label class="quiz-opt"><input type="radio" name="q1" value="job"/> <span class="quiz-opt-text">🎯 Get a job or internship faster</span></label>
+          <label class="quiz-opt"><input type="radio" name="q1" value="freelance"/> <span class="quiz-opt-text">💼 Attract freelance clients</span></label>
+          <label class="quiz-opt"><input type="radio" name="q1" value="showcase"/> <span class="quiz-opt-text">🎨 Showcase my work and skills</span></label>
+          <label class="quiz-opt"><input type="radio" name="q1" value="brand"/> <span class="quiz-opt-text">🚀 Build my personal brand</span></label>
+        </div>
+        <div class="quiz-nav">
+          <span></span>
+          <button class="quiz-next" onclick="quizNext(1)">Next →</button>
+        </div>
+      </div>
+
+      <div class="quiz-step" id="qs2">
+        <div class="quiz-q">How would you describe your experience level?</div>
+        <div class="quiz-options">
+          <label class="quiz-opt"><input type="radio" name="q2" value="student"/> <span class="quiz-opt-text">🎓 Student / fresher (0–1 yr)</span></label>
+          <label class="quiz-opt"><input type="radio" name="q2" value="junior"/> <span class="quiz-opt-text">💻 Junior developer (1–3 yrs)</span></label>
+          <label class="quiz-opt"><input type="radio" name="q2" value="mid"/> <span class="quiz-opt-text">⚡ Mid-level developer (3–5 yrs)</span></label>
+          <label class="quiz-opt"><input type="radio" name="q2" value="senior"/> <span class="quiz-opt-text">🏆 Senior / specialist (5+ yrs)</span></label>
+        </div>
+        <div class="quiz-nav">
+          <button class="quiz-back" onclick="quizBack(2)">← Back</button>
+          <button class="quiz-next" onclick="quizNext(2)">Next →</button>
+        </div>
+      </div>
+
+      <div class="quiz-step" id="qs3">
+        <div class="quiz-q">What matters most to you in the portfolio?</div>
+        <div class="quiz-options">
+          <label class="quiz-opt"><input type="radio" name="q3" value="fast"/> <span class="quiz-opt-text">⚡ Fast delivery at best price</span></label>
+          <label class="quiz-opt"><input type="radio" name="q3" value="animated"/> <span class="quiz-opt-text">✨ Smooth animations & interactivity</span></label>
+          <label class="quiz-opt"><input type="radio" name="q3" value="impressive"/> <span class="quiz-opt-text">🔥 Maximum wow-factor for clients</span></label>
+        </div>
+        <div class="quiz-nav">
+          <button class="quiz-back" onclick="quizBack(3)">← Back</button>
+          <button class="quiz-next" onclick="quizResult()">See My Plan →</button>
+        </div>
+      </div>
+
+      <div class="quiz-result" id="quizResult">
+        <div style="margin-bottom:.5rem;font-size:.75rem;font-family:var(--font-mono);color:var(--text3);letter-spacing:.1em;text-transform:uppercase">Recommended for you</div>
+        <div class="quiz-result-plan" id="quizPlan">—</div>
+        <div class="quiz-result-desc" id="quizDesc">—</div>
+        <a href="#order" class="btn-green" style="display:inline-flex">Order This Plan →</a>
+        <button onclick="quizReset()" style="display:block;margin:.75rem auto 0;background:none;border:none;color:var(--text3);font-size:.8rem;cursor:pointer;text-decoration:underline">Retake Quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PORTFOLIO GALLERY ═══ -->
+<section class="gallery-sec sec" id="gallery">
+  <div class="sec-tag rv">01 — Our Work</div>
+  <h2 class="sec-h rv">Portfolio <span class="g">Gallery</span></h2>
+  <p class="sec-sub rv">Browse portfolio styles across different fields. Filter by your role.</p>
+  <div class="gallery-filters rv">
+    <button class="filter-btn active" onclick="filterGallery('all',this)">All</button>
+    <button class="filter-btn" onclick="filterGallery('developer',this)">Developer</button>
+    <button class="filter-btn" onclick="filterGallery('designer',this)">Designer</button>
+    <button class="filter-btn" onclick="filterGallery('student',this)">Student</button>
+    <button class="filter-btn" onclick="filterGallery('founder',this)">Founder</button>
+  </div>
+  <div class="gallery-grid">
+
+    <div class="gal-card rv" data-cat="developer">
+      <div class="gal-preview theme-dev">
+        <div class="browser-bar"><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-url"></div></div>
+        <div class="gal-screen">
+          <div class="gs-hero"><div class="gs-avatar dev"></div><div class="gs-lines"><div class="gs-line w70"></div><div class="gs-line w50"></div></div></div>
+          <div class="gs-cards"><div class="gs-card"></div><div class="gs-card"></div><div class="gs-card"></div></div>
+          <div class="gs-tag" style="background:rgba(59,130,246,.3)"></div>
+        </div>
+      </div>
+      <div class="gal-info">
+        <div class="gal-type">Full Stack Developer</div>
+        <div class="gal-name">Developer Portfolio</div>
+        <div class="gal-tags"><span class="gal-tag">React</span><span class="gal-tag">Projects</span><span class="gal-tag">GitHub</span></div>
+      </div>
+    </div>
+
+    <div class="gal-card rv d1" data-cat="designer">
+      <div class="gal-preview theme-design">
+        <div class="browser-bar"><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-url"></div></div>
+        <div class="gal-screen">
+          <div class="gs-hero" style="background:#1a0f00"><div class="gs-avatar des"></div><div class="gs-lines"><div class="gs-line w70" style="background:rgba(249,115,22,.25)"></div><div class="gs-line w40"></div></div></div>
+          <div class="gs-cards"><div class="gs-card" style="background:rgba(249,115,22,.08)"></div><div class="gs-card"></div></div>
+          <div class="gs-tag" style="background:rgba(249,115,22,.3)"></div>
+        </div>
+      </div>
+      <div class="gal-info">
+        <div class="gal-type">UI/UX Designer</div>
+        <div class="gal-name">Design Portfolio</div>
+        <div class="gal-tags"><span class="gal-tag">Figma</span><span class="gal-tag">Case Studies</span></div>
+      </div>
+    </div>
+
+    <div class="gal-card rv d2" data-cat="student">
+      <div class="gal-preview theme-student">
+        <div class="browser-bar"><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-url"></div></div>
+        <div class="gal-screen">
+          <div class="gs-hero" style="background:#12001a"><div class="gs-avatar stu"></div><div class="gs-lines"><div class="gs-line w70" style="background:rgba(168,85,247,.25)"></div><div class="gs-line w40"></div></div></div>
+          <div class="gs-cards"><div class="gs-card"></div><div class="gs-card" style="background:rgba(168,85,247,.08)"></div></div>
+          <div class="gs-tag" style="background:rgba(236,72,153,.3)"></div>
+        </div>
+      </div>
+      <div class="gal-info">
+        <div class="gal-type">CS Student</div>
+        <div class="gal-name">Student Portfolio</div>
+        <div class="gal-tags"><span class="gal-tag">Internship</span><span class="gal-tag">Projects</span></div>
+      </div>
+    </div>
+
+    <div class="gal-card rv" data-cat="developer">
+      <div class="gal-preview theme-minimal">
+        <div class="browser-bar"><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-url"></div></div>
+        <div class="gal-screen">
+          <div class="gs-hero" style="background:#111"><div class="gs-avatar min"></div><div class="gs-lines"><div class="gs-line w70" style="background:rgba(229,229,229,.2)"></div><div class="gs-line w40"></div></div></div>
+          <div class="gs-cards"><div class="gs-card"></div><div class="gs-card"></div></div>
+          <div class="gs-tag" style="background:rgba(229,229,229,.15)"></div>
+        </div>
+      </div>
+      <div class="gal-info">
+        <div class="gal-type">Backend Developer</div>
+        <div class="gal-name">Minimal Dark Portfolio</div>
+        <div class="gal-tags"><span class="gal-tag">Node</span><span class="gal-tag">API</span><span class="gal-tag">Clean</span></div>
+      </div>
+    </div>
+
+    <div class="gal-card rv d1" data-cat="founder">
+      <div class="gal-preview theme-startup">
+        <div class="browser-bar"><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-url"></div></div>
+        <div class="gal-screen">
+          <div class="gs-hero" style="background:#1a1000"><div class="gs-avatar sta"></div><div class="gs-lines"><div class="gs-line w70" style="background:rgba(251,191,36,.25)"></div><div class="gs-line w40"></div></div></div>
+          <div class="gs-cards"><div class="gs-card" style="background:rgba(251,191,36,.08)"></div><div class="gs-card"></div><div class="gs-card"></div></div>
+          <div class="gs-tag" style="background:rgba(251,191,36,.3)"></div>
+        </div>
+      </div>
+      <div class="gal-info">
+        <div class="gal-type">Startup Founder</div>
+        <div class="gal-name">Founder Portfolio</div>
+        <div class="gal-tags"><span class="gal-tag">About</span><span class="gal-tag">Startup</span><span class="gal-tag">Ventures</span></div>
+      </div>
+    </div>
+
+    <div class="gal-card rv d2" data-cat="developer">
+      <div class="gal-preview theme-creative">
+        <div class="browser-bar"><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-dot"></div><div class="bb-url"></div></div>
+        <div class="gal-screen">
+          <div class="gs-hero" style="background:#0a1a0f"><div class="gs-avatar cre"></div><div class="gs-lines"><div class="gs-line w70" style="background:rgba(0,232,122,.2)"></div><div class="gs-line w40"></div></div></div>
+          <div class="gs-cards"><div class="gs-card" style="background:rgba(0,232,122,.06)"></div><div class="gs-card"></div></div>
+          <div class="gs-tag" style="background:rgba(0,184,255,.3)"></div>
+        </div>
+      </div>
+      <div class="gal-info">
+        <div class="gal-type">Creative Developer</div>
+        <div class="gal-name">3D Animated Portfolio</div>
+        <div class="gal-tags"><span class="gal-tag">Three.js</span><span class="gal-tag">GSAP</span><span class="gal-tag">Premium</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ PRICING CALCULATOR ═══ -->
+<section class="calc-sec sec" id="pricing-calc">
+  <div class="sec-tag rv">02 — Pricing</div>
+  <h2 class="sec-h rv">Build Your <span class="g">Custom Quote</span></h2>
+  <p class="sec-sub rv">Start with a base plan and add exactly what you need. See your total update live.</p>
+  <div class="calc-layout">
+    <div>
+      <div class="base-label rv">Step 1 — Choose Base Plan</div>
+      <div class="base-selector rv">
+        <div class="base-option sel" onclick="selectBase(this,99,'Basic Portfolio')" data-price="99">
+          <span class="base-option-name">Basic Portfolio</span>
+          <span class="base-option-price">₹99</span>
+        </div>
+        <div class="base-option" onclick="selectBase(this,199,'Animated Portfolio')" data-price="199">
+          <span class="base-option-name">Animated Portfolio</span>
+          <span class="base-option-price">₹199</span>
+        </div>
+        <div class="base-option" onclick="selectBase(this,499,'Premium Portfolio')" data-price="499">
+          <span class="base-option-name">Premium Portfolio</span>
+          <span class="base-option-price">₹499</span>
+        </div>
+      </div>
+      <div class="base-label rv" style="margin-top:1.5rem">Step 2 — Add-ons (Optional)</div>
+      <div class="calc-addons rv">
+        <div class="addon-row" onclick="toggleAddon(this,99)" data-price="99">
+          <div class="addon-left">
+            <span class="addon-icon">🚀</span>
+            <div><div class="addon-name">Custom Domain Setup</div><div class="addon-desc">Full Vercel / Netlify deployment with your domain</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="addon-price">+₹99</span>
+            <div class="toggle-sw"></div>
+          </div>
+        </div>
+        <div class="addon-row" onclick="toggleAddon(this,49)" data-price="49">
+          <div class="addon-left">
+            <span class="addon-icon">📊</span>
+            <div><div class="addon-name">Google Analytics Integration</div><div class="addon-desc">Track visitors, sessions, and performance</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="addon-price">+₹49</span>
+            <div class="toggle-sw"></div>
+          </div>
+        </div>
+        <div class="addon-row" onclick="toggleAddon(this,79)" data-price="79">
+          <div class="addon-left">
+            <span class="addon-icon">📝</span>
+            <div><div class="addon-name">Blog Section</div><div class="addon-desc">Write and publish articles directly on your portfolio</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="addon-price">+₹79</span>
+            <div class="toggle-sw"></div>
+          </div>
+        </div>
+        <div class="addon-row" onclick="toggleAddon(this,59)" data-price="59">
+          <div class="addon-left">
+            <span class="addon-icon">🌙</span>
+            <div><div class="addon-name">Dark / Light Mode Toggle</div><div class="addon-desc">Built-in theme switcher for your visitors</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="addon-price">+₹59</span>
+            <div class="toggle-sw"></div>
+          </div>
+        </div>
+        <div class="addon-row" onclick="toggleAddon(this,149)" data-price="149">
+          <div class="addon-left">
+            <span class="addon-icon">🎥</span>
+            <div><div class="addon-name">Video Introduction Section</div><div class="addon-desc">Embed a personal video intro or Loom walkthrough</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <span class="addon-price">+₹149</span>
+            <div class="toggle-sw"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rv d1">
+      <div class="calc-summary">
+        <h4>Your Quote</h4>
+        <div class="summary-lines">
+          <div class="summary-line"><span class="label">Base Plan</span><span class="val" id="sumBase">₹99</span></div>
+          <div class="summary-line" id="sumAddonLine" style="display:none"><span class="label">Add-ons</span><span class="val" id="sumAddons">₹0</span></div>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-total">
+          <span class="tl">Total</span>
+          <span class="tv" id="sumTotal">₹99</span>
+        </div>
+        <div class="summary-del">⚡ Delivery within 24 hours</div>
+        <div style="margin-top:1.5rem">
+          <a href="#order" class="btn-green" style="width:100%;justify-content:center">Order for <span id="sumBtnPrice">₹99</span> →</a>
+        </div>
+        <div style="margin-top:.85rem;font-size:.75rem;color:var(--text3);text-align:center;line-height:1.55">
+          🔒 UPI Payment · Source code included<br/>1 free revision · 24h money-back guarantee
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMPARISON TABLE ═══ -->
+<section class="compare-sec sec" id="compare">
+  <div class="sec-tag rv">03 — Compare</div>
+  <h2 class="sec-h rv">Plan <span class="g">Comparison</span></h2>
+  <p class="sec-sub rv">See exactly what's included in each plan so you choose with confidence.</p>
+  <div class="compare-wrapper rv">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Basic<br/><span class="cmp-price">₹99</span></th>
+          <th class="featured-col">Animated<span class="cmp-badge">Popular</span><br/><span class="cmp-price">₹199</span></th>
+          <th>Premium<br/><span class="cmp-price">₹499</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Single Page Portfolio</td><td><span class="tick">✓</span></td><td class="featured-col"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Responsive (Mobile-first)</td><td><span class="tick">✓</span></td><td class="featured-col"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>About + Skills + Contact</td><td><span class="tick">✓</span></td><td class="featured-col"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Projects Showcase</td><td><span class="cross">–</span></td><td class="featured-col"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Scroll Animations</td><td><span class="cross">–</span></td><td class="featured-col"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Interactive UI Elements</td><td><span class="cross">–</span></td><td class="featured-col"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Custom Sections</td><td><span class="cross">–</span></td><td class="featured-col"><span class="partial">2 sections</span></td><td><span class="tick">Unlimited</span></td></tr>
+        <tr><td>3D Animations</td><td><span class="cross">–</span></td><td class="featured-col"><span class="cross">–</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Custom Domain Support</td><td><span class="cross">–</span></td><td class="featured-col"><span class="cross">–</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Source Code Included</td><td><span class="tick">✓</span></td><td class="featured-col"><span class="tick">✓</span></td><td><span class="tick">✓</span></td></tr>
+        <tr><td>Free Revisions</td><td><span class="cross">–</span></td><td class="featured-col"><span class="partial">1 round</span></td><td><span class="tick">2 rounds</span></td></tr>
+        <tr><td>Delivery Time</td><td>24 hours</td><td class="featured-col">24 hours</td><td>24 hours</td></tr>
+        <tr class="price-row">
+          <td></td>
+          <td><a href="#order" class="btn-ghost" style="padding:.5rem 1rem;font-size:.78rem;display:inline-block">Order Basic</a></td>
+          <td class="featured-col"><a href="#order" class="btn-green" style="padding:.5rem 1.2rem;font-size:.78rem;display:inline-block">Order Animated</a></td>
+          <td><a href="#order" class="btn-ghost" style="padding:.5rem 1rem;font-size:.78rem;display:inline-block">Order Premium</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ DELIVERY TIMELINE ═══ -->
+<section class="timeline-sec sec" id="timeline">
+  <div class="sec-tag rv">04 — Process</div>
+  <h2 class="sec-h rv">Order <span class="g">to Delivered</span></h2>
+  <p class="sec-sub rv">Here's exactly what happens from the moment you place your order.</p>
+  <div class="timeline rv">
+    <div class="tl-item"><div class="tl-dot done"></div><div class="tl-time">T + 0 min</div><div class="tl-title">You Place Order</div><div class="tl-desc">Submit the order form with your name, plan, skills, projects, and contact details.</div></div>
+    <div class="tl-item"><div class="tl-dot done"></div><div class="tl-time">T + 30 min</div><div class="tl-title">Payment Link Sent</div><div class="tl-desc">You receive a UPI payment link via WhatsApp or email within 30 minutes of submission.</div></div>
+    <div class="tl-item"><div class="tl-dot done"></div><div class="tl-time">T + 1 hr</div><div class="tl-title">Work Begins</div><div class="tl-desc">Development starts immediately after payment confirmation. Your content is woven into a custom design.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">T + 12 hrs</div><div class="tl-title">Preview Shared</div><div class="tl-desc">A preview link is sent for your review. Any revision requests can be made at this stage.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">T + 24 hrs</div><div class="tl-title">Final Delivery</div><div class="tl-desc">Complete source code, deployment guide, and live URL (if selected) — all delivered to your inbox.</div></div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="faq-sec sec" id="faq">
+  <div class="sec-tag rv">05 — FAQ</div>
+  <h2 class="sec-h rv">Common <span class="g">Questions</span></h2>
+  <p class="sec-sub rv">Everything you need to know before placing your order.</p>
+  <div class="faq-grid rv">
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Do I actually get the source code?<div class="faq-icon">+</div></div><div class="faq-a">Yes, every plan includes full source code. You own it completely — modify it, learn from it, host it anywhere, no strings attached.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What if I need changes after delivery?<div class="faq-icon">+</div></div><div class="faq-a">Animated and Premium plans include 1–2 free revision rounds. Basic plan can be revised for a small fee. All revision requests are handled within 12 hours.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How exactly does the 24-hour guarantee work?<div class="faq-icon">+</div></div><div class="faq-a">The 24-hour clock starts from payment confirmation. If your portfolio isn't delivered within 24 hours for any reason, you get a full refund — no questions asked.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What information do I need to provide?<div class="faq-icon">+</div></div><div class="faq-a">Your name, skills, 2–4 project descriptions (with tech stack), GitHub link (optional), and any design preferences. The more detail you give, the better the result.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Which payment methods are accepted?<div class="faq-icon">+</div></div><div class="faq-a">UPI (GPay, PhonePe, Paytm, BHIM) and bank transfer. A secure payment link is sent after order submission.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can you deploy the site for me?<div class="faq-icon">+</div></div><div class="faq-a">Yes! Add the "Custom Domain Setup" add-on during checkout and we'll handle full Vercel/Netlify deployment with your domain name.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is this suitable for non-developers too?<div class="faq-icon">+</div></div><div class="faq-a">Absolutely. We build portfolios for designers, students, freelancers, and startup founders — not just developers. Choose the style that fits your field.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What tech stack is used?<div class="faq-icon">+</div></div><div class="faq-a">Basic: Pure HTML/CSS/JS. Animated: HTML + CSS animations + vanilla JS. Premium: React/Next.js with GSAP/Three.js. You can request a specific stack too.</div></div>
+  </div>
+</section>
+
+<!-- ═══ FOUNDER ═══ -->
+<section class="founder-sec sec" id="founder">
+  <div class="sec-tag rv">06 — About</div>
+  <h2 class="sec-h rv">The <span class="g">Founder</span></h2>
+  <div class="founder-card rv">
+    <div class="f-avatar">SB</div>
+    <div>
+      <div class="f-name">SUJAY BANARJEE</div>
+      <div class="f-role">// B.Tech CSE · LPU · Web Developer · Startup Builder</div>
+      <p class="f-bio">I'm a Computer Science student at Lovely Professional University who builds things for the web. PortfolioForge started because I kept seeing talented developers get overlooked simply because they had no professional presence online — and every solution was either too expensive or too generic.<br/><br/>Every portfolio I deliver gets the same obsessive attention to detail I'd put into my own. Because I know exactly what it takes to get noticed.</p>
+      <div class="f-chips">
+        <span class="f-chip">React</span><span class="f-chip">Next.js</span><span class="f-chip">Node.js</span>
+        <span class="f-chip">Three.js</span><span class="f-chip">GSAP</span><span class="f-chip">MongoDB</span>
+        <span class="f-chip">TypeScript</span><span class="f-chip">Tailwind</span>
+      </div>
+      <div class="f-links">
+        <a href="https://sujay-banarjee-portfolio.vercel.app/" target="_blank" class="f-link">🌐 Live Portfolio ↗</a>
+        <a href="#" class="f-link">💼 LinkedIn</a>
+        <a href="#" class="f-link">🐙 GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="testi-sec sec" id="testimonials">
+  <div class="sec-tag rv">07 — Reviews</div>
+  <h2 class="sec-h rv">What Clients <span class="g">Say</span></h2>
+  <div class="testi-scroll rv" id="testiScroll">
+    <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-quote">"My recruiter mentioned the portfolio in the first round. Placed at a Bangalore startup within 3 weeks of going live."</p><div class="t-sep"></div><div class="t-name">Rahul Kumar</div><div class="t-role">Final Year CSE · IIT Roorkee</div></div>
+    <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-quote">"The animated portfolio at ₹199 is stunning. Got 3 freelance inquiries in the first week. Honestly shocked at this price."</p><div class="t-sep"></div><div class="t-name">Priya Sharma</div><div class="t-role">Freelance Developer · Pune</div></div>
+    <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-quote">"Ordered at 11pm. Portfolio in my inbox by 8am. Clean code, beautiful design. Recommended to my entire college batch."</p><div class="t-sep"></div><div class="t-name">Vikram Tiwari</div><div class="t-role">B.Tech Student · LPU</div></div>
+    <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-quote">"The premium portfolio actually impressed my interviewer. Best ₹499 I've spent in 2025. Sujay is super responsive."</p><div class="t-sep"></div><div class="t-name">Arjun Mehta</div><div class="t-role">Full Stack Dev · Bangalore</div></div>
+    <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-quote">"As a design student I expected to be critical. I wasn't. Typography and layout choices are genuinely thoughtful."</p><div class="t-sep"></div><div class="t-name">Neha Kapoor</div><div class="t-role">UI/UX Student · Delhi</div></div>
+    <div class="t-card"><div class="t-stars">★★★★★</div><p class="t-quote">"Clean, well-commented code I could actually learn from and modify myself. This is what good service looks like."</p><div class="t-sep"></div><div class="t-name">Sneha Chatterjee</div><div class="t-role">Backend Dev · Kolkata</div></div>
+  </div>
+  <div class="testi-arrows">
+    <div class="t-arrow" onclick="scrollTesti(-1)">←</div>
+    <div class="t-arrow" onclick="scrollTesti(1)">→</div>
+  </div>
+</section>
+
+<!-- ═══ ORDER ═══ -->
+<section class="order-sec sec" id="order">
+  <div class="sec-tag rv">08 — Order</div>
+  <h2 class="sec-h rv">Place Your <span class="g">Order</span></h2>
+  <div class="order-layout">
+    <div class="rv">
+      <div class="order-sidebar">
+        <h3>Ready to stand<br/>out online?</h3>
+        <p>Fill in your details and receive your complete professional portfolio within 24 hours of payment. No fluff, no delays.</p>
+      </div>
+      <div class="guarantee-boxes">
+        <div class="gbox"><span class="gbox-icon">⚡</span><div class="gbox-text"><strong>24-Hour Guarantee</strong> — Full refund if not delivered on time.</div></div>
+        <div class="gbox"><span class="gbox-icon">🔒</span><div class="gbox-text"><strong>Secure UPI Payment</strong> — GPay, PhonePe, Paytm accepted.</div></div>
+        <div class="gbox"><span class="gbox-icon">📦</span><div class="gbox-text"><strong>Full Source Code</strong> — You own it completely, forever.</div></div>
+        <div class="gbox"><span class="gbox-icon">🔄</span><div class="gbox-text"><strong>Free Revision</strong> — Animated & Premium plans include revisions.</div></div>
+      </div>
+    </div>
+    <div class="rv d1">
+      <div class="order-form" id="orderFormWrap">
+        <div class="form-head">
+          <span>New Order</span>
+          <small>⚡ 24h delivery</small>
+        </div>
+        <div class="form-body">
+          <div class="form-row">
+            <div class="form-group"><label>Full Name *</label><input type="text" id="o-name" placeholder="Your full name"/></div>
+            <div class="form-group"><label>Email *</label><input type="email" id="o-email" placeholder="you@email.com"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Select Plan *</label>
+              <select id="o-plan">
+                <option value="" disabled selected>Choose a plan</option>
+                <option>Basic Portfolio — ₹99</option>
+                <option>Animated Portfolio — ₹199</option>
+                <option>Premium Portfolio — ₹499</option>
+              </select>
+            </div>
+            <div class="form-group"><label>GitHub URL</label><input type="url" id="o-github" placeholder="github.com/username"/></div>
+          </div>
+          <div class="form-group full"><label>Your Skills *</label><input type="text" id="o-skills" placeholder="React, Node.js, Python, MongoDB…"/></div>
+          <div class="form-group full"><label>Projects to Showcase *</label><textarea id="o-projects" placeholder="Name, description, tech stack, link for 2–4 projects…"></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label>WhatsApp / Phone *</label><input type="text" id="o-phone" placeholder="+91 XXXXX XXXXX"/></div>
+            <div class="form-group"><label>Design Notes</label><input type="text" id="o-notes" placeholder="Color preferences, references…"/></div>
+          </div>
+        </div>
+        <div class="form-footer">
+          <button class="submit-btn" onclick="placeOrder()">Submit Order — Get Portfolio in 24h →</button>
+          <div class="pay-note">UPI payment details (GPay/PhonePe/Paytm) sent to your WhatsApp/email within 30 min. Work begins on payment confirmation.</div>
+        </div>
+      </div>
+      <div class="success-panel" id="successPanel">
+        <div class="sp-icon">🎉</div>
+        <div class="sp-title">ORDER RECEIVED</div>
+        <p class="sp-text">You'll receive a UPI payment link on your WhatsApp or email within 30 minutes.<br/>Your portfolio will be delivered within 24 hours of payment confirmation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="f-brand-name">Portfolio<span>Forge</span></div>
+      <p class="f-brand-text">Professional developer portfolios. Affordable pricing. Delivered in 24 hours. Built by a developer, for developers.</p>
+      <div class="f-socials">
+        <a href="#" class="f-soc" title="GitHub"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+        <a href="#" class="f-soc" title="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.22 0z"/></svg></a>
+        <a href="mailto:hello@portfolioforge.dev" class="f-soc" title="Email"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="fc-title">Navigate</div>
+      <div class="fc-links"><a href="#home">Home</a><a href="#gallery">Portfolio Gallery</a><a href="#pricing-calc">Pricing</a><a href="#compare">Compare Plans</a><a href="#order">Order Now</a></div>
+    </div>
+    <div class="footer-col">
+      <div class="fc-title">Plans</div>
+      <div class="fc-links"><a href="#order">Basic — ₹99</a><a href="#order">Animated — ₹199</a><a href="#order">Premium — ₹499</a><a href="#pricing-calc">Custom Quote</a></div>
+    </div>
+    <div class="footer-col">
+      <div class="fc-title">Contact</div>
+      <div class="fc-links"><a href="mailto:hello@portfolioforge.dev">Email Us</a><a href="https://wa.me/919999999999" target="_blank">WhatsApp</a><a href="https://sujay-banarjee-portfolio.vercel.app/" target="_blank">Live Example ↗</a><a href="#faq">FAQ</a></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 <strong>PortfolioForge</strong> — Built by <a href="#">Sujay Banarjee</a></div>
+    <div class="footer-mono">// delivering portfolios since 2025</div>
+  </div>
+</footer>
+
+<script>
+/* ─── LOADER ─── */
+let pct=0;
+const pctEl=document.getElementById('loaderPct');
+const pctTimer=setInterval(()=>{pct+=Math.floor(Math.random()*18)+5;if(pct>=100){pct=100;clearInterval(pctTimer);setTimeout(()=>document.getElementById('loader').classList.add('gone'),400)}pctEl.textContent=pct+'%'},120);
+
+/* ─── CURSOR ─── */
+const dot=document.getElementById('dot'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function animR(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animR)})();
+document.querySelectorAll('a,button,.addon-row,.base-option,.gal-card,.faq-item,.quiz-opt').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{dot.style.transform='translate(-50%,-50%) scale(2.5)';ring.style.opacity='.15'});
+  el.addEventListener('mouseleave',()=>{dot.style.transform='translate(-50%,-50%) scale(1)';ring.style.opacity='.4'});
+});
+
+/* ─── THEME TOGGLE ─── */
+const themeBtn=document.getElementById('themeBtn');
+themeBtn.addEventListener('click',()=>{
+  const d=document.documentElement;
+  if(d.dataset.theme==='dark'){d.dataset.theme='light';themeBtn.textContent='☀️'}
+  else{d.dataset.theme='dark';themeBtn.textContent='🌙'}
+});
+
+/* ─── MOBILE MENU ─── */
+function toggleMob(){document.getElementById('mobMenu').classList.toggle('show')}
+
+/* ─── STICKY BAR ─── */
+const stickyBar=document.getElementById('sticky-bar');
+window.addEventListener('scroll',()=>{
+  stickyBar.classList.toggle('visible',window.scrollY>window.innerHeight*.7);
+});
+
+/* ─── SCROLL REVEAL ─── */
+const rvObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>rvObs.observe(el));
+
+/* ─── COUNT-UP STATS ─── */
+document.querySelectorAll('[data-count]').forEach(el=>{
+  const target=+el.dataset.count;
+  const dup=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){
+      let n=0;const step=Math.ceil(target/40);
+      const t=setInterval(()=>{n=Math.min(n+step,target);el.textContent=n+(el.textContent.includes('%')?'%':'+');if(n>=target)clearInterval(t)},30);
+      dup.disconnect();
+    }
+  },{threshold:.5});
+  dup.observe(el);
+  el.textContent='0'+(el.dataset.count==='100'?'%':'+');
+});
+
+/* ─── QUIZ ─── */
+let quizAnswers={};
+function quizNext(step){
+  const name='q'+step;
+  const sel=document.querySelector(`input[name="${name}"]:checked`);
+  if(!sel){alert('Please select an option.');return}
+  quizAnswers['q'+step]=sel.value;
+  document.getElementById('qs'+step).classList.remove('active');
+  const next=document.getElementById('qs'+(step+1));
+  if(next)next.classList.add('active');
+  document.getElementById('quizBar').style.width=((step+1)/4*100)+'%';
+}
+function quizBack(step){
+  document.getElementById('qs'+step).classList.remove('active');
+  document.getElementById('qs'+(step-1)).classList.add('active');
+  document.getElementById('quizBar').style.width=((step-1)/4*100)+'%';
+}
+function quizResult(){
+  const sel=document.querySelector('input[name="q3"]:checked');
+  if(!sel){alert('Please select an option.');return}
+  quizAnswers.q3=sel.value;
+  document.getElementById('qs3').classList.remove('active');
+  document.getElementById('quizBar').style.width='100%';
+  let plan,desc;
+  const q3=quizAnswers.q3;
+  if(q3==='fast'){plan='Basic Portfolio — ₹99';desc='Clean, responsive, professional. Everything you need to get started and get noticed, delivered fast.'}
+  else if(q3==='animated'){plan='Animated Portfolio — ₹199';desc='Scroll animations, interactive UI, and a design that shows personality. Perfect for standing out.'}
+  else{plan='Premium Portfolio — ₹499';desc='3D animations, advanced UI, multiple custom sections. Maximum impact for clients and recruiters.'}
+  document.getElementById('quizPlan').textContent=plan;
+  document.getElementById('quizDesc').textContent=desc;
+  document.getElementById('quizResult').style.display='block';
+}
+function quizReset(){
+  document.querySelectorAll('.quiz-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('qs1').classList.add('active');
+  document.getElementById('quizResult').style.display='none';
+  document.getElementById('quizBar').style.width='25%';
+  document.querySelectorAll('.quiz-opt input').forEach(i=>i.checked=false);
+  quizAnswers={};
+}
+
+/* ─── GALLERY FILTER ─── */
+function filterGallery(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.gal-card').forEach(c=>{
+    if(cat==='all'||c.dataset.cat===cat){c.style.display='';delete c.dataset.hidden}
+    else{c.style.display='none';c.dataset.hidden='1'}
+  });
+}
+
+/* ─── PRICING CALCULATOR ─── */
+let basePrice=99,addonTotal=0,baseName='Basic Portfolio';
+function selectBase(el,price,name){
+  document.querySelectorAll('.base-option').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');basePrice=price;baseName=name;updateCalc();
+}
+function toggleAddon(el,price){
+  el.classList.toggle('active');
+  addonTotal=0;
+  document.querySelectorAll('.addon-row.active').forEach(r=>addonTotal+=parseInt(r.dataset.price));
+  updateCalc();
+}
+function updateCalc(){
+  const total=basePrice+addonTotal;
+  document.getElementById('sumBase').textContent='₹'+basePrice;
+  document.getElementById('sumAddons').textContent='₹'+addonTotal;
+  document.getElementById('sumTotal').textContent='₹'+total;
+  document.getElementById('sumBtnPrice').textContent='₹'+total;
+  const adLine=document.getElementById('sumAddonLine');
+  adLine.style.display=addonTotal>0?'flex':'none';
+}
+
+/* ─── FAQ ─── */
+function toggleFaq(el){
+  const item=el.parentElement;
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}
+
+/* ─── TESTIMONIALS SCROLL ─── */
+function scrollTesti(dir){
+  const sc=document.getElementById('testiScroll');
+  sc.scrollBy({left:dir*332,behavior:'smooth'});
+}
+
+/* ─── ORDER FORM ─── */
+function placeOrder(){
+  const fields=[
+    document.getElementById('o-name').value.trim(),
+    document.getElementById('o-email').value.trim(),
+    document.getElementById('o-plan').value,
+    document.getElementById('o-skills').value.trim(),
+    document.getElementById('o-projects').value.trim(),
+    document.getElementById('o-phone').value.trim()
+  ];
+  if(fields.some(f=>!f)){alert('Please fill in all required fields.');return}
+  document.getElementById('orderFormWrap').style.display='none';
+  document.getElementById('successPanel').style.display='block';
+}
+</script>
+</body>
+</html>
