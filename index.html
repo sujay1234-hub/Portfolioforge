@@ -107,30 +107,40 @@ nav{
 .nav-links a:hover{color:var(--green)}
 .nav-actions{display:flex;align-items:center;gap:.75rem}
 .theme-btn{
-  width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);
+  width:40px;height:40px;border-radius:50%;background:var(--surface);border:1px solid var(--border);
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   font-size:.9rem;transition:border-color .2s;
+  min-width:40px;
 }
 .theme-btn:hover{border-color:var(--green)}
 .nav-cta{
-  background:var(--green);color:#000;padding:.5rem 1.3rem;border-radius:var(--r);
+  background:var(--green);color:#000;padding:.55rem 1.3rem;border-radius:var(--r);
   font-size:.8rem;font-weight:800;letter-spacing:.04em;transition:opacity .2s,transform .2s;
+  min-height:40px;display:inline-flex;align-items:center;
 }
 .nav-cta:hover{opacity:.85;transform:translateY(-1px)}
-.ham-btn{display:none;flex-direction:column;gap:4.5px;cursor:pointer;padding:4px;background:none;border:none}
-.ham-btn span{display:block;width:20px;height:1.5px;background:var(--text);border-radius:1px;transition:.3s}
+.ham-btn{display:none;flex-direction:column;gap:4.5px;cursor:pointer;padding:8px;background:none;border:none;min-width:44px;min-height:44px;align-items:center;justify-content:center}
+.ham-btn span{display:block;width:22px;height:2px;background:var(--text);border-radius:1px;transition:.3s}
 @media(max-width:860px){.nav-links{display:none}.ham-btn{display:flex}}
 
 /* mobile menu */
 .mob-menu{
   position:fixed;inset:0;top:64px;background:var(--bg);z-index:399;
-  display:none;flex-direction:column;gap:0;padding:1rem 4vw;
+  display:none;flex-direction:column;gap:0;padding:1.25rem 4vw;
   border-top:1px solid var(--border);
+  overflow-y:auto;
+  padding-bottom:calc(1.25rem + env(safe-area-inset-bottom));
 }
 .mob-menu.show{display:flex}
 .mob-menu a{
-  padding:1.1rem 0;font-size:1.05rem;font-weight:600;color:var(--text);
+  padding:1.2rem 0;font-size:1.05rem;font-weight:600;color:var(--text);
   border-bottom:1px solid var(--border);
+  min-height:52px;display:flex;align-items:center;
+}
+.mob-menu a:last-child{
+  margin-top:.5rem;border:none;background:var(--green);color:#000;
+  padding:1rem 1.5rem;border-radius:var(--r);justify-content:center;
+  font-size:1rem;font-weight:800;
 }
 
 /* ═══════════════════════════════════════════
@@ -140,7 +150,8 @@ nav{
   position:fixed;bottom:0;left:0;right:0;z-index:300;
   background:var(--bg2);border-top:1px solid var(--border);
   padding:.85rem 4vw;
-  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding-bottom:calc(.85rem + env(safe-area-inset-bottom));
+  display:flex;align-items:center;justify-content:space-between;gap:.75rem;
   transform:translateY(100%);transition:transform .35s ease;
   flex-wrap:wrap;
 }
@@ -154,15 +165,21 @@ nav{
   padding:.3rem .7rem;border-radius:var(--r);
 }
 .sticky-cta{
-  background:var(--green);color:#000;padding:.5rem 1.5rem;border-radius:var(--r);
-  font-size:.82rem;font-weight:800;
+  background:var(--green);color:#000;padding:.65rem 1.5rem;border-radius:var(--r);
+  font-size:.82rem;font-weight:800;min-height:44px;display:inline-flex;align-items:center;
+}
+@media(max-width:480px){
+  #sticky-bar{flex-direction:column;align-items:stretch;gap:.5rem}
+  .sticky-text{font-size:.82rem}
+  .sticky-actions{justify-content:space-between}
+  .sticky-cta{flex:1;justify-content:center}
 }
 
 /* ═══════════════════════════════════════════
    FLOATING WHATSAPP
 ═══════════════════════════════════════════ */
 .wa-fab{
-  position:fixed;bottom:80px;right:2rem;z-index:300;
+  position:fixed;bottom:80px;right:1.25rem;z-index:300;
   width:52px;height:52px;border-radius:50%;
   background:#25d366;
   display:flex;align-items:center;justify-content:center;
@@ -177,6 +194,10 @@ nav{
   animation:waPulse 2s ease-out infinite;
 }
 @keyframes waPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.5);opacity:0}}
+@media(max-width:480px){
+  .wa-fab{bottom:calc(72px + env(safe-area-inset-bottom));right:1rem;width:48px;height:48px}
+  .wa-fab svg{width:22px;height:22px}
+}
 
 /* ═══════════════════════════════════════════
    HERO
@@ -213,10 +234,11 @@ nav{
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 h1.hero-headline{
   font-family:var(--font-display);
-  font-size:clamp(4rem,9vw,9rem);
+  font-size:clamp(2.8rem,9vw,9rem);
   line-height:.92;letter-spacing:.02em;
   color:var(--text);
 }
+@media(max-width:360px){h1.hero-headline{font-size:clamp(2.4rem,8vw,4rem)}}
 h1.hero-headline .accent{
   color:var(--green);
   display:inline-block;
@@ -238,6 +260,7 @@ h1.hero-headline .outline{
   display:inline-flex;align-items:center;gap:.5rem;
   transition:box-shadow .2s,transform .2s;
   border:none;cursor:pointer;
+  min-height:48px;
 }
 .btn-green:hover{box-shadow:0 0 30px var(--green-glow);transform:translateY(-2px)}
 .btn-ghost{
@@ -245,8 +268,13 @@ h1.hero-headline .outline{
   padding:.9rem 2rem;border-radius:var(--r);
   font-size:.9rem;font-weight:600;
   transition:border-color .2s,color .2s;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;
+  min-height:48px;
 }
 .btn-ghost:hover{border-color:var(--green);color:var(--green)}
+@media(max-width:480px){
+  .hero-ctas{gap:.75rem}
+  .btn-green,.btn-ghost{width:100%;justify-content:center;padding:.9rem 1.5rem}
+}
 
 /* hero stats ticker */
 .hero-stats{
@@ -661,9 +689,10 @@ h1.hero-headline .outline{
 .form-group select,
 .form-group textarea{
   background:var(--bg);border:1px solid var(--border);border-radius:var(--r);
-  padding:.7rem .9rem;color:var(--text);
-  font-family:var(--font-body);font-size:.9rem;font-weight:400;
+  padding:.75rem .9rem;color:var(--text);
+  font-family:var(--font-body);font-size:1rem;font-weight:400;
   outline:none;transition:border-color .2s,box-shadow .2s;
+  min-height:44px;
 }
 .form-group input:focus,
 .form-group select:focus,
@@ -676,6 +705,7 @@ h1.hero-headline .outline{
   width:100%;padding:1rem;background:var(--green);color:#000;border:none;
   border-radius:var(--r);font-family:var(--font-body);font-weight:800;font-size:1rem;
   letter-spacing:.04em;cursor:pointer;transition:opacity .2s,transform .2s;
+  min-height:52px;
 }
 .submit-btn:hover{opacity:.85;transform:translateY(-1px)}
 .pay-note{
@@ -718,7 +748,43 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:4rem 4vw
 .footer-copy{font-size:.77rem;color:var(--text3)}
 .footer-copy a{color:var(--green)}
 .footer-mono{font-family:var(--font-mono);font-size:.7rem;color:var(--text3);opacity:.5}
-</style>
+
+/* ═══════════════════════════════════════════
+   MOBILE OVERRIDES (< 480px)
+═══════════════════════════════════════════ */
+@media(max-width:480px){
+  .sec{padding:4rem 4vw}
+  .hero{padding:84px 4vw 3rem}
+  .hero-sub{font-size:.95rem}
+  .hero-stats{gap:1.5rem;margin-top:2.5rem}
+  .hstat-num{font-size:2.2rem}
+  .trust-row{gap:1rem}
+  .trust-badge{font-size:.72rem}
+  .quiz-body{padding:1.25rem}
+  .quiz-opt{padding:.9rem 1rem}
+  .quiz-back,.quiz-next{padding:.6rem 1rem;min-height:44px}
+  .base-option{padding:.75rem .9rem}
+  .addon-row{padding:.85rem 1rem}
+  .form-body{padding:1.25rem;gap:.75rem}
+  .form-footer{padding:1rem 1.25rem}
+  .form-head{padding:.9rem 1.25rem}
+  .faq-q{padding:1.1rem 1.25rem;font-size:.88rem}
+  .faq-a{padding:0 1.25rem}
+  .faq-item.open .faq-a{padding:0 1.25rem 1.1rem}
+  .founder-card{padding:1.5rem}
+  .f-avatar{width:100px;height:100px;font-size:2.8rem}
+  .t-card{min-width:280px;max-width:280px;padding:1.25rem}
+  .t-arrow{width:44px;height:44px}
+  footer{padding:3rem 4vw 1.5rem}
+  .f-soc{width:40px;height:40px}
+  .filter-btn{min-height:36px}
+}
+@media(max-width:360px){
+  .sec{padding:3.5rem 3.5vw}
+  .hero{padding:78px 3.5vw 2.5rem}
+  .nav-cta{display:none}
+  .form-row{grid-template-columns:1fr}
+}
 </head>
 <body>
 
@@ -745,7 +811,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:4rem 4vw
   <div class="nav-actions">
     <button class="theme-btn" id="themeBtn" title="Toggle theme">🌙</button>
     <a href="#order" class="nav-cta">Order Now →</a>
-    <button class="ham-btn" id="hamBtn" onclick="toggleMob()">
+    <button class="ham-btn" id="hamBtn" onclick="toggleMob()" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobMenu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -1268,6 +1334,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:4rem 4vw
         </div>
         <div class="form-footer">
           <button class="submit-btn" onclick="placeOrder()">Submit Order — Get Portfolio in 24h →</button>
+          <p style="text-align:center;margin-top:.75rem;font-size:.78rem;color:var(--text3)">Or use our <a href="submit-order.html" style="color:var(--green);font-weight:700">step-by-step order form →</a></p>
           <div class="pay-note">UPI payment details (GPay/PhonePe/Paytm) sent to your WhatsApp/email within 30 min. Work begins on payment confirmation.</div>
         </div>
       </div>
@@ -1336,7 +1403,12 @@ themeBtn.addEventListener('click',()=>{
 });
 
 /* ─── MOBILE MENU ─── */
-function toggleMob(){document.getElementById('mobMenu').classList.toggle('show')}
+function toggleMob(){
+  const menu=document.getElementById('mobMenu');
+  const btn=document.getElementById('hamBtn');
+  menu.classList.toggle('show');
+  btn.setAttribute('aria-expanded',menu.classList.contains('show').toString());
+}
 
 /* ─── STICKY BAR ─── */
 const stickyBar=document.getElementById('sticky-bar');
