@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Submit Order — PortfolioForge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root{
+  --bg:#0d0f14;
+  --bg2:#12151c;
+  --bg3:#181b24;
+  --surface:#1e2230;
+  --border:#252a38;
+  --green:#00e87a;
+  --green-dim:rgba(0,232,122,.12);
+  --green-glow:rgba(0,232,122,.25);
+  --text:#eef0f6;
+  --text2:#9aa0b8;
+  --text3:#5a6080;
+  --white:#ffffff;
+  --red:#ff4757;
+  --yellow:#ffd32a;
+  --font-display:'Bebas Neue',sans-serif;
+  --font-body:'Manrope',sans-serif;
+  --font-mono:'Fira Code',monospace;
+  --r:6px;
+  --r-lg:14px;
+  --shadow:0 8px 40px rgba(0,0,0,.45);
+}
+[data-theme="light"]{
+  --bg:#f0f2f8;
+  --bg2:#e8eaf2;
+  --bg3:#f8f9fc;
+  --surface:#ffffff;
+  --border:#d8dce8;
+  --text:#0d0f14;
+  --text2:#4a5070;
+  --text3:#8a90a8;
+}
+
+/* ═══════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--font-body);font-size:16px;line-height:1.6;
+  overflow-x:hidden;transition:background .3s,color .3s;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+::selection{background:var(--green);color:#000}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--green);border-radius:2px}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav{
+  position:sticky;top:0;left:0;right:0;z-index:400;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 4vw;height:64px;
+  background:rgba(13,15,20,.95);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+[data-theme="light"] nav{background:rgba(240,242,248,.97)}
+.nav-logo{
+  font-family:var(--font-display);font-size:1.6rem;letter-spacing:.06em;
+  display:flex;align-items:center;gap:.4rem;
+}
+.nav-logo .g{color:var(--green)}
+.nav-back{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.82rem;font-weight:600;color:var(--text2);
+  background:var(--surface);border:1px solid var(--border);
+  padding:.5rem 1rem;border-radius:var(--r);
+  transition:border-color .2s,color .2s;
+  min-height:40px;
+}
+.nav-back:hover{border-color:var(--green);color:var(--green)}
+.nav-right{display:flex;align-items:center;gap:.75rem}
+.theme-btn{
+  width:40px;height:40px;border-radius:50%;background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:.9rem;transition:border-color .2s;min-width:40px;
+}
+.theme-btn:hover{border-color:var(--green)}
+
+/* ═══════════════════════════════════════════
+   STEP INDICATOR
+═══════════════════════════════════════════ */
+.step-bar{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:1rem 4vw;
+}
+.step-track{
+  display:flex;align-items:center;gap:0;max-width:700px;margin:0 auto;
+}
+.step-item{
+  display:flex;align-items:center;gap:.5rem;flex:1;
+}
+.step-item:last-child{flex:0 0 auto}
+.step-num{
+  width:32px;height:32px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:800;color:var(--text3);
+  transition:border-color .25s,background .25s,color .25s;
+  flex-shrink:0;font-family:var(--font-mono);
+}
+.step-label{font-size:.72rem;font-weight:600;color:var(--text3);letter-spacing:.04em;white-space:nowrap}
+.step-line{flex:1;height:2px;background:var(--border);border-radius:1px;margin:0 .5rem;transition:background .25s}
+.step-item.done .step-num{background:var(--green);border-color:var(--green);color:#000}
+.step-item.done .step-label{color:var(--text2)}
+.step-item.done ~ .step-line,.step-line.done{background:var(--green)}
+.step-item.active .step-num{border-color:var(--green);color:var(--green)}
+.step-item.active .step-label{color:var(--text)}
+@media(max-width:480px){
+  .step-label{display:none}
+  .step-num{width:28px;height:28px;font-size:.7rem}
+  .step-line{margin:0 .3rem}
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════ */
+.page-body{
+  display:grid;grid-template-columns:1fr 360px;gap:2rem;
+  max-width:1100px;margin:0 auto;padding:2rem 4vw;
+  align-items:start;
+}
+@media(max-width:860px){.page-body{grid-template-columns:1fr}}
+@media(max-width:480px){.page-body{padding:1.25rem 4vw;gap:1.25rem}}
+
+/* ═══════════════════════════════════════════
+   FORM CARD
+═══════════════════════════════════════════ */
+.form-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  overflow:hidden;
+}
+.form-card-head{
+  background:var(--green);padding:1.1rem 1.75rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.form-card-head span{font-family:var(--font-display);font-size:1.35rem;letter-spacing:.04em;color:#000}
+.form-card-head small{font-family:var(--font-mono);font-size:.7rem;color:rgba(0,0,0,.6)}
+.step-form{display:none;padding:1.75rem;flex-direction:column;gap:1rem}
+.step-form.active{display:flex}
+.step-title{font-family:var(--font-display);font-size:1.4rem;letter-spacing:.04em;color:var(--text);margin-bottom:.25rem}
+.step-desc{font-size:.85rem;color:var(--text2);font-weight:300;margin-bottom:.5rem}
+
+/* form fields */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+@media(max-width:640px){.form-row{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:.35rem}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-family:var(--font-mono);font-size:.65rem;color:var(--text3);letter-spacing:.12em;text-transform:uppercase}
+.form-group label .req{color:var(--red);margin-left:2px}
+.form-group input,
+.form-group select,
+.form-group textarea{
+  background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:.75rem 1rem;color:var(--text);
+  font-family:var(--font-body);font-size:1rem;font-weight:400;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  min-height:48px;width:100%;
+  -webkit-appearance:none;appearance:none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,232,122,.1)}
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,71,87,.1)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--text3)}
+.form-group select option{background:var(--bg2)}
+.form-group textarea{resize:vertical;min-height:100px}
+.field-error{font-size:.75rem;color:var(--red);display:none;margin-top:.2rem;font-weight:600}
+.field-error.show{display:block}
+
+/* ═══════════════════════════════════════════
+   PLAN SELECTOR
+═══════════════════════════════════════════ */
+.plan-cards{display:flex;flex-direction:column;gap:.75rem}
+.plan-card{
+  display:flex;align-items:flex-start;gap:1rem;padding:1.1rem 1.25rem;
+  background:var(--bg);border:2px solid var(--border);border-radius:var(--r-lg);
+  cursor:pointer;transition:border-color .2s,background .2s;
+  position:relative;
+}
+.plan-card:hover{border-color:var(--green);background:var(--green-dim)}
+.plan-card.selected{border-color:var(--green);background:var(--green-dim)}
+.plan-card input[type="radio"]{
+  position:absolute;opacity:0;width:0;height:0;
+}
+.plan-radio{
+  width:20px;height:20px;border-radius:50%;border:2px solid var(--border);
+  flex-shrink:0;margin-top:.15rem;transition:border-color .2s,background .2s;
+  display:flex;align-items:center;justify-content:center;
+}
+.plan-card.selected .plan-radio{border-color:var(--green);background:var(--green)}
+.plan-card.selected .plan-radio::after{content:'';width:7px;height:7px;border-radius:50%;background:#000}
+.plan-info{flex:1}
+.plan-name{font-size:.95rem;font-weight:700;color:var(--text)}
+.plan-features{font-size:.78rem;color:var(--text3);margin-top:.2rem;line-height:1.6}
+.plan-price{font-family:var(--font-mono);font-size:1.1rem;color:var(--green);font-weight:700;white-space:nowrap}
+.plan-badge{
+  display:inline-block;background:var(--green);color:#000;
+  font-size:.6rem;font-weight:800;padding:.1rem .5rem;border-radius:2px;
+  letter-spacing:.06em;text-transform:uppercase;margin-left:.5rem;vertical-align:middle;
+}
+
+/* ═══════════════════════════════════════════
+   ADDON ITEMS
+═══════════════════════════════════════════ */
+.addon-items{display:flex;flex-direction:column;gap:.6rem}
+.addon-item{
+  display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;
+  background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);
+  cursor:pointer;transition:border-color .2s,background .2s;
+}
+.addon-item:hover{border-color:var(--green)}
+.addon-item.checked{border-color:var(--green);background:var(--green-dim)}
+.addon-item input[type="checkbox"]{
+  width:18px;height:18px;accent-color:var(--green);flex-shrink:0;cursor:pointer;
+}
+.addon-item-info{flex:1}
+.addon-item-name{font-size:.88rem;font-weight:600;color:var(--text)}
+.addon-item-desc{font-size:.75rem;color:var(--text3);margin-top:.1rem}
+.addon-item-price{font-family:var(--font-mono);font-size:.88rem;color:var(--green)}
+
+/* ═══════════════════════════════════════════
+   PAYMENT SECTION
+═══════════════════════════════════════════ */
+.payment-methods{display:flex;flex-direction:column;gap:.75rem}
+.pay-method{
+  display:flex;align-items:center;gap:1rem;padding:1.1rem 1.25rem;
+  background:var(--bg);border:2px solid var(--border);border-radius:var(--r-lg);
+  cursor:pointer;transition:border-color .2s,background .2s;
+}
+.pay-method:hover{border-color:var(--green)}
+.pay-method.selected{border-color:var(--green);background:var(--green-dim)}
+.pay-method input[type="radio"]{
+  position:absolute;opacity:0;width:0;height:0;
+}
+.pay-icon{font-size:1.5rem;flex-shrink:0;width:36px;text-align:center}
+.pay-name{font-size:.9rem;font-weight:700;color:var(--text)}
+.pay-desc{font-size:.75rem;color:var(--text3);margin-top:.1rem}
+.pay-note-box{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
+  padding:1rem 1.25rem;display:flex;gap:.75rem;align-items:flex-start;margin-top:.5rem;
+}
+.pay-note-icon{color:var(--green);font-size:1rem;flex-shrink:0;margin-top:.1rem}
+.pay-note-text{font-size:.82rem;color:var(--text2);line-height:1.6}
+
+/* ═══════════════════════════════════════════
+   NAVIGATION BUTTONS
+═══════════════════════════════════════════ */
+.form-nav{
+  display:flex;align-items:center;justify-content:space-between;gap:.75rem;
+  padding:1.25rem 1.75rem;background:var(--bg);border-top:1px solid var(--border);
+}
+.btn-back{
+  background:transparent;border:1.5px solid var(--border);color:var(--text2);
+  padding:.75rem 1.5rem;border-radius:var(--r);font-size:.9rem;font-weight:700;
+  cursor:pointer;transition:border-color .2s,color .2s;
+  min-height:52px;display:inline-flex;align-items:center;gap:.4rem;
+}
+.btn-back:hover{border-color:var(--green);color:var(--green)}
+.btn-next{
+  background:var(--green);color:#000;border:none;
+  padding:.75rem 2rem;border-radius:var(--r);font-size:.9rem;font-weight:800;
+  cursor:pointer;transition:opacity .2s,transform .2s;
+  min-height:52px;display:inline-flex;align-items:center;gap:.4rem;flex:1;justify-content:center;
+  max-width:280px;
+}
+.btn-next:hover{opacity:.85;transform:translateY(-1px)}
+.btn-submit{
+  background:var(--green);color:#000;border:none;
+  padding:.85rem 2rem;border-radius:var(--r);font-size:1rem;font-weight:800;
+  cursor:pointer;transition:opacity .2s,transform .2s;
+  min-height:56px;display:inline-flex;align-items:center;gap:.5rem;flex:1;justify-content:center;
+}
+.btn-submit:hover{opacity:.85;transform:translateY(-1px)}
+@media(max-width:480px){
+  .form-nav{padding:1rem}
+  .btn-next{max-width:none}
+  .btn-back{flex-shrink:0}
+}
+
+/* ═══════════════════════════════════════════
+   ORDER SUMMARY SIDEBAR
+═══════════════════════════════════════════ */
+.order-sidebar{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  overflow:hidden;position:sticky;top:80px;
+}
+@media(max-width:860px){
+  .order-sidebar{position:static;order:-1}
+}
+.sidebar-head{
+  background:var(--bg3);border-bottom:1px solid var(--border);
+  padding:1rem 1.25rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sidebar-head h3{font-family:var(--font-display);font-size:1.2rem;letter-spacing:.04em;color:var(--text)}
+.sidebar-head .badge{
+  font-family:var(--font-mono);font-size:.65rem;color:var(--green);
+  background:var(--green-dim);border:1px solid rgba(0,232,122,.2);
+  padding:.2rem .6rem;border-radius:100px;
+}
+.sidebar-body{padding:1.25rem;display:flex;flex-direction:column;gap:.75rem}
+.sum-row{display:flex;justify-content:space-between;align-items:center}
+.sum-label{font-size:.83rem;color:var(--text2)}
+.sum-val{font-family:var(--font-mono);font-size:.83rem;color:var(--text)}
+.sum-divider{height:1px;background:var(--border);margin:.25rem 0}
+.sum-total-row{display:flex;justify-content:space-between;align-items:baseline;padding:.5rem 0}
+.sum-total-label{font-size:.85rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.sum-total-val{font-family:var(--font-display);font-size:2.5rem;color:var(--green);line-height:1}
+.sidebar-guarantee{
+  border-top:1px solid var(--border);padding:1rem 1.25rem;
+  display:flex;flex-direction:column;gap:.5rem;
+}
+.gbox{
+  display:flex;align-items:center;gap:.75rem;
+  font-size:.8rem;color:var(--text2);
+}
+.gbox-icon{font-size:.9rem;flex-shrink:0;width:20px;text-align:center}
+.gbox strong{color:var(--text)}
+@media(max-width:860px){
+  .order-sidebar{display:flex;flex-wrap:wrap;border-radius:var(--r)}
+  .sidebar-head{flex:0 0 100%}
+  .sidebar-body{flex:1;min-width:200px}
+  .sidebar-guarantee{flex:1;min-width:200px;border-top:none;border-left:1px solid var(--border)}
+}
+@media(max-width:580px){
+  .order-sidebar{flex-direction:column}
+  .sidebar-guarantee{border-left:none;border-top:1px solid var(--border)}
+}
+
+/* ═══════════════════════════════════════════
+   SUCCESS PANEL
+═══════════════════════════════════════════ */
+.success-panel{
+  display:none;padding:3rem 2rem;text-align:center;
+  flex-direction:column;align-items:center;gap:1rem;
+}
+.success-panel.show{display:flex}
+.sp-icon{font-size:3.5rem}
+.sp-title{font-family:var(--font-display);font-size:2.5rem;color:var(--green);letter-spacing:.05em;line-height:1}
+.sp-text{font-size:.9rem;color:var(--text2);line-height:1.75;max-width:400px}
+.sp-btn{
+  background:var(--green);color:#000;border:none;
+  padding:.85rem 2.5rem;border-radius:var(--r);font-size:.95rem;font-weight:800;
+  cursor:pointer;min-height:52px;display:inline-flex;align-items:center;gap:.5rem;
+  margin-top:.5rem;text-decoration:none;
+}
+
+/* ═══════════════════════════════════════════
+   ERROR TOAST
+═══════════════════════════════════════════ */
+.toast{
+  position:fixed;bottom:calc(1.5rem + env(safe-area-inset-bottom));left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--red);color:#fff;
+  padding:.85rem 1.5rem;border-radius:var(--r);
+  font-size:.88rem;font-weight:700;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;
+  z-index:1000;white-space:nowrap;max-width:90vw;
+  text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Portfolio<span class="g">Forge</span></a>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle dark/light theme">🌙</button>
+    <a href="index.html" class="nav-back">← Back</a>
+  </div>
+</nav>
+
+<!-- STEP INDICATOR -->
+<div class="step-bar">
+  <div class="step-track" id="stepTrack">
+    <div class="step-item active" id="si1">
+      <div class="step-num">1</div>
+      <div class="step-label">Your Details</div>
+    </div>
+    <div class="step-line" id="sl1"></div>
+    <div class="step-item" id="si2">
+      <div class="step-num">2</div>
+      <div class="step-label">Choose Plan</div>
+    </div>
+    <div class="step-line" id="sl2"></div>
+    <div class="step-item" id="si3">
+      <div class="step-num">3</div>
+      <div class="step-label">Add-ons</div>
+    </div>
+    <div class="step-line" id="sl3"></div>
+    <div class="step-item" id="si4">
+      <div class="step-num">4</div>
+      <div class="step-label">Payment</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+
+  <!-- FORM CARD -->
+  <div class="form-card" id="formCard">
+
+    <div class="form-card-head">
+      <span id="stepHeading">Your Details</span>
+      <small>Step <span id="stepNum">1</span> of 4</small>
+    </div>
+
+    <!-- STEP 1: PERSONAL INFO -->
+    <form class="step-form active" id="step1" novalidate>
+      <div class="step-title">Tell us about yourself</div>
+      <div class="step-desc">Basic info so we can deliver your portfolio and stay in touch.</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" id="f-name" placeholder="Your full name" autocomplete="name"/>
+          <div class="field-error" id="err-name">Please enter your full name.</div>
+        </div>
+        <div class="form-group">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" id="f-email" placeholder="you@email.com" autocomplete="email"/>
+          <div class="field-error" id="err-email">Please enter a valid email address.</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>WhatsApp / Phone <span class="req">*</span></label>
+          <input type="tel" id="f-phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel"/>
+          <div class="field-error" id="err-phone">Please enter your phone number.</div>
+        </div>
+        <div class="form-group">
+          <label>GitHub URL</label>
+          <input type="url" id="f-github" placeholder="github.com/username" autocomplete="url"/>
+          <div class="field-error" id="err-github">Please enter a valid URL.</div>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label>Your Skills <span class="req">*</span></label>
+        <input type="text" id="f-skills" placeholder="React, Node.js, Python, MongoDB…"/>
+        <div class="field-error" id="err-skills">Please list your key skills.</div>
+      </div>
+      <div class="form-group full">
+        <label>Projects to Showcase <span class="req">*</span></label>
+        <textarea id="f-projects" placeholder="For each project: Name, description, tech stack, and link (if any). 2–4 projects ideal."></textarea>
+        <div class="field-error" id="err-projects">Please describe your projects.</div>
+      </div>
+      <div class="form-group full">
+        <label>Design Notes / Preferences</label>
+        <input type="text" id="f-notes" placeholder="Color preferences, inspiration sites, special requests…"/>
+      </div>
+    </form>
+
+    <!-- STEP 2: PLAN -->
+    <form class="step-form" id="step2" novalidate>
+      <div class="step-title">Choose Your Plan</div>
+      <div class="step-desc">Pick the portfolio tier that best fits your goals and budget.</div>
+      <div class="plan-cards" id="planCards">
+        <label class="plan-card" onclick="selectPlan(this,99,'Basic Portfolio')">
+          <input type="radio" name="plan" value="basic"/>
+          <div class="plan-radio"></div>
+          <div class="plan-info">
+            <div class="plan-name">Basic Portfolio</div>
+            <div class="plan-features">Clean, responsive design · Mobile optimized · Source code included</div>
+          </div>
+          <div class="plan-price">₹99</div>
+        </label>
+        <label class="plan-card" onclick="selectPlan(this,199,'Animated Portfolio')">
+          <input type="radio" name="plan" value="animated"/>
+          <div class="plan-radio"></div>
+          <div class="plan-info">
+            <div class="plan-name">Animated Portfolio <span class="plan-badge">Popular</span></div>
+            <div class="plan-features">Scroll animations · Interactive UI · 1 free revision · All Basic features</div>
+          </div>
+          <div class="plan-price">₹199</div>
+        </label>
+        <label class="plan-card" onclick="selectPlan(this,499,'Premium Portfolio')">
+          <input type="radio" name="plan" value="premium"/>
+          <div class="plan-radio"></div>
+          <div class="plan-info">
+            <div class="plan-name">Premium Portfolio <span class="plan-badge">Best</span></div>
+            <div class="plan-features">3D animations · Advanced sections · 2 free revisions · Priority delivery</div>
+          </div>
+          <div class="plan-price">₹499</div>
+        </label>
+      </div>
+      <div class="field-error" id="err-plan" style="margin-top:.25rem">Please select a plan to continue.</div>
+    </form>
+
+    <!-- STEP 3: ADD-ONS -->
+    <form class="step-form" id="step3" novalidate>
+      <div class="step-title">Optional Add-ons</div>
+      <div class="step-desc">Enhance your portfolio with extra features. All optional — skip if not needed.</div>
+      <div class="addon-items" id="addonItems">
+        <label class="addon-item" onclick="toggleAddon(this,49)">
+          <input type="checkbox" data-price="49"/>
+          <div class="addon-item-info">
+            <div class="addon-item-name">🔗 Custom Domain Setup</div>
+            <div class="addon-item-desc">We configure your custom domain and SSL certificate.</div>
+          </div>
+          <div class="addon-item-price">+₹49</div>
+        </label>
+        <label class="addon-item" onclick="toggleAddon(this,79)">
+          <input type="checkbox" data-price="79"/>
+          <div class="addon-item-info">
+            <div class="addon-item-name">📧 Contact Form Integration</div>
+            <div class="addon-item-desc">Working contact form with email notification.</div>
+          </div>
+          <div class="addon-item-price">+₹79</div>
+        </label>
+        <label class="addon-item" onclick="toggleAddon(this,99)">
+          <input type="checkbox" data-price="99"/>
+          <div class="addon-item-info">
+            <div class="addon-item-name">📊 Analytics Setup</div>
+            <div class="addon-item-desc">Google Analytics or Plausible integration.</div>
+          </div>
+          <div class="addon-item-price">+₹99</div>
+        </label>
+        <label class="addon-item" onclick="toggleAddon(this,149)">
+          <input type="checkbox" data-price="149"/>
+          <div class="addon-item-info">
+            <div class="addon-item-name">🚀 Deployment &amp; Hosting Setup</div>
+            <div class="addon-item-desc">We deploy to Vercel/Netlify and set everything up live.</div>
+          </div>
+          <div class="addon-item-price">+₹149</div>
+        </label>
+        <label class="addon-item" onclick="toggleAddon(this,199)">
+          <input type="checkbox" data-price="199"/>
+          <div class="addon-item-info">
+            <div class="addon-item-name">📝 Blog Section</div>
+            <div class="addon-item-desc">Markdown-powered blog with 3 sample posts.</div>
+          </div>
+          <div class="addon-item-price">+₹199</div>
+        </label>
+      </div>
+    </form>
+
+    <!-- STEP 4: PAYMENT -->
+    <form class="step-form" id="step4" novalidate>
+      <div class="step-title">Payment Method</div>
+      <div class="step-desc">Choose how you'd like to pay. Payment link sent within 30 minutes.</div>
+      <div class="payment-methods" id="payMethods">
+        <label class="pay-method" onclick="selectPayment(this,'gpay')">
+          <input type="radio" name="payment" value="gpay"/>
+          <div class="pay-icon">📱</div>
+          <div>
+            <div class="pay-name">Google Pay (GPay)</div>
+            <div class="pay-desc">Instant UPI payment</div>
+          </div>
+        </label>
+        <label class="pay-method" onclick="selectPayment(this,'phonepe')">
+          <input type="radio" name="payment" value="phonepe"/>
+          <div class="pay-icon">💜</div>
+          <div>
+            <div class="pay-name">PhonePe</div>
+            <div class="pay-desc">Instant UPI payment</div>
+          </div>
+        </label>
+        <label class="pay-method" onclick="selectPayment(this,'paytm')">
+          <input type="radio" name="payment" value="paytm"/>
+          <div class="pay-icon">💙</div>
+          <div>
+            <div class="pay-name">Paytm</div>
+            <div class="pay-desc">UPI or wallet payment</div>
+          </div>
+        </label>
+        <label class="pay-method" onclick="selectPayment(this,'bank')">
+          <input type="radio" name="payment" value="bank"/>
+          <div class="pay-icon">🏦</div>
+          <div>
+            <div class="pay-name">Bank Transfer / IMPS</div>
+            <div class="pay-desc">Direct bank transfer</div>
+          </div>
+        </label>
+      </div>
+      <div class="field-error" id="err-payment" style="margin-top:.25rem">Please select a payment method.</div>
+      <div class="pay-note-box">
+        <div class="pay-note-icon">ℹ️</div>
+        <div class="pay-note-text">Payment details will be sent to your WhatsApp or email within 30 minutes. Work begins immediately after payment confirmation. Full refund if not delivered in 24 hours.</div>
+      </div>
+    </form>
+
+    <!-- FORM NAV BUTTONS -->
+    <div class="form-nav" id="formNav">
+      <button type="button" class="btn-back" id="btnBack" onclick="prevStep()" style="display:none">← Back</button>
+      <button type="button" class="btn-next" id="btnNext" onclick="nextStep()">Continue →</button>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-panel" id="successPanel">
+      <div class="sp-icon">🎉</div>
+      <div class="sp-title">ORDER RECEIVED!</div>
+      <p class="sp-text">Your order is confirmed. You'll receive a UPI payment link on your <strong>WhatsApp or email</strong> within <strong>30 minutes</strong>.<br/><br/>Your portfolio will be delivered within <strong>24 hours</strong> of payment confirmation.</p>
+      <a href="index.html" class="sp-btn">← Back to Home</a>
+    </div>
+
+  </div><!-- /form-card -->
+
+  <!-- SIDEBAR -->
+  <aside class="order-sidebar" id="orderSidebar">
+    <div class="sidebar-head">
+      <h3>Order Summary</h3>
+      <div class="badge">⚡ 24h delivery</div>
+    </div>
+    <div class="sidebar-body">
+      <div class="sum-row" id="sumPlanRow" style="display:none">
+        <div class="sum-label">Plan</div>
+        <div class="sum-val" id="sumPlanName">—</div>
+      </div>
+      <div class="sum-row" id="sumPlanPriceRow" style="display:none">
+        <div class="sum-label">Base price</div>
+        <div class="sum-val" id="sumPlanPrice">—</div>
+      </div>
+      <div id="sumAddonRows"></div>
+      <div class="sum-divider"></div>
+      <div class="sum-total-row">
+        <div class="sum-total-label">Total</div>
+        <div class="sum-total-val" id="sumTotal">₹—</div>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:.68rem;color:var(--text3)">No hidden charges</div>
+    </div>
+    <div class="sidebar-guarantee">
+      <div class="gbox"><div class="gbox-icon">⚡</div><div><strong>24h Guarantee</strong> — Refund if late</div></div>
+      <div class="gbox"><div class="gbox-icon">🔒</div><div><strong>Secure UPI</strong> — GPay, PhonePe, Paytm</div></div>
+      <div class="gbox"><div class="gbox-icon">📦</div><div><strong>Full Source Code</strong> — Yours forever</div></div>
+      <div class="gbox"><div class="gbox-icon">🔄</div><div><strong>Free Revision</strong> — Animated &amp; Premium</div></div>
+    </div>
+  </aside>
+
+</div><!-- /page-body -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─── THEME TOGGLE ─── */
+const themeBtn=document.getElementById('themeBtn');
+themeBtn.addEventListener('click',()=>{
+  const d=document.documentElement;
+  if(d.dataset.theme==='dark'){d.dataset.theme='light';themeBtn.textContent='☀️'}
+  else{d.dataset.theme='dark';themeBtn.textContent='🌙'}
+});
+
+/* ─── STATE ─── */
+let currentStep=1;
+const totalSteps=4;
+let selectedPlan={name:'',price:0};
+let selectedPayment='';
+let addonTotal=0;
+
+const stepTitles=['Your Details','Choose Plan','Add-ons','Payment'];
+
+/* ─── TOAST ─── */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+/* ─── UPDATE STEP UI ─── */
+function updateStepUI(){
+  for(let i=1;i<=totalSteps;i++){
+    const si=document.getElementById('si'+i);
+    si.classList.remove('active','done');
+    if(i<currentStep)si.classList.add('done');
+    else if(i===currentStep)si.classList.add('active');
+    if(i<totalSteps){
+      const sl=document.getElementById('sl'+i);
+      sl.classList.toggle('done',i<currentStep);
+    }
+  }
+  document.getElementById('stepHeading').textContent=stepTitles[currentStep-1];
+  document.getElementById('stepNum').textContent=currentStep;
+  document.getElementById('btnBack').style.display=currentStep>1?'inline-flex':'none';
+  document.getElementById('btnNext').textContent=currentStep===totalSteps?'Place Order ✓':'Continue →';
+}
+
+/* ─── VALIDATE STEP ─── */
+function validateStep(step){
+  let valid=true;
+  if(step===1){
+    const name=document.getElementById('f-name').value.trim();
+    const email=document.getElementById('f-email').value.trim();
+    const phone=document.getElementById('f-phone').value.trim();
+    const skills=document.getElementById('f-skills').value.trim();
+    const projects=document.getElementById('f-projects').value.trim();
+    const github=document.getElementById('f-github').value.trim();
+    const emailInvalid=!email||!email.includes('@')||!/^[^@]+@[^@]+\.[^@]+$/.test(email);
+    setErr('f-name','err-name',!name);if(!name)valid=false;
+    setErr('f-email','err-email',emailInvalid);if(emailInvalid)valid=false;
+    setErr('f-phone','err-phone',!phone);if(!phone)valid=false;
+    setErr('f-skills','err-skills',!skills);if(!skills)valid=false;
+    setErr('f-projects','err-projects',!projects);if(!projects)valid=false;
+    if(github){
+      const normalizedGithub=github.startsWith('http')?github:'https://'+github;
+      const githubInvalid=!/^https?:\/\/(www\.)?github\.com\/.+/.test(normalizedGithub);
+      setErr('f-github','err-github',githubInvalid);if(githubInvalid)valid=false;
+    }else{setErr('f-github','err-github',false)}
+  }
+  if(step===2){
+    if(!selectedPlan.price){
+      document.getElementById('err-plan').classList.add('show');valid=false;
+    }else{document.getElementById('err-plan').classList.remove('show')}
+  }
+  if(step===4){
+    if(!selectedPayment){
+      document.getElementById('err-payment').classList.add('show');valid=false;
+    }else{document.getElementById('err-payment').classList.remove('show')}
+  }
+  return valid;
+}
+
+function setErr(fieldId,errId,hasError){
+  const field=document.getElementById(fieldId);
+  const err=document.getElementById(errId);
+  if(hasError){field.classList.add('error');err.classList.add('show')}
+  else{field.classList.remove('error');err.classList.remove('show')}
+}
+
+/* ─── NEXT / PREV ─── */
+function nextStep(){
+  if(!validateStep(currentStep)){showToast('Please fix the highlighted fields.');return}
+  if(currentStep===totalSteps){submitOrder();return}
+  document.getElementById('step'+currentStep).classList.remove('active');
+  currentStep++;
+  document.getElementById('step'+currentStep).classList.add('active');
+  updateStepUI();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function prevStep(){
+  if(currentStep<=1)return;
+  document.getElementById('step'+currentStep).classList.remove('active');
+  currentStep--;
+  document.getElementById('step'+currentStep).classList.add('active');
+  updateStepUI();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── PLAN SELECTION ─── */
+function selectPlan(el,price,name){
+  document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPlan={name,price};
+  document.getElementById('err-plan').classList.remove('show');
+  updateSummary();
+}
+
+/* ─── ADDON TOGGLE ─── */
+function toggleAddon(el,price){
+  const cb=el.querySelector('input[type="checkbox"]');
+  el.classList.toggle('checked',cb.checked);
+  addonTotal=0;
+  document.querySelectorAll('.addon-item input[type="checkbox"]:checked').forEach(i=>addonTotal+=parseInt(i.dataset.price,10));
+  updateSummary();
+}
+
+/* ─── PAYMENT SELECTION ─── */
+function selectPayment(el,method){
+  document.querySelectorAll('.pay-method').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPayment=method;
+  document.getElementById('err-payment').classList.remove('show');
+}
+
+/* ─── SUMMARY ─── */
+function updateSummary(){
+  const total=selectedPlan.price+addonTotal;
+  const planRow=document.getElementById('sumPlanRow');
+  const planPriceRow=document.getElementById('sumPlanPriceRow');
+  if(selectedPlan.price){
+    planRow.style.display='flex';planPriceRow.style.display='flex';
+    document.getElementById('sumPlanName').textContent=selectedPlan.name;
+    document.getElementById('sumPlanPrice').textContent='₹'+selectedPlan.price;
+    document.getElementById('sumTotal').textContent='₹'+total;
+  }else{
+    planRow.style.display='none';planPriceRow.style.display='none';
+    document.getElementById('sumTotal').textContent='₹—';
+  }
+  // addon rows
+  const addonContainer=document.getElementById('sumAddonRows');
+  addonContainer.innerHTML='';
+  document.querySelectorAll('.addon-item input[type="checkbox"]:checked').forEach(i=>{
+    const addonName=i.closest('.addon-item').querySelector('.addon-item-name').textContent;
+    const row=document.createElement('div');row.className='sum-row';
+    const labelEl=document.createElement('div');labelEl.className='sum-label';labelEl.style.fontSize='.78rem';labelEl.textContent=addonName;
+    const valEl=document.createElement('div');valEl.className='sum-val';valEl.textContent='+₹'+i.dataset.price;
+    row.appendChild(labelEl);row.appendChild(valEl);
+    addonContainer.appendChild(row);
+  });
+}
+
+/* ─── SUBMIT ─── */
+function submitOrder(){
+  document.getElementById('formCard').querySelectorAll('.step-form,.form-card-head,.form-nav').forEach(el=>el.style.display='none');
+  const sp=document.getElementById('successPanel');
+  sp.classList.add('show');
+  document.getElementById('orderSidebar').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── INIT ─── */
+updateStepUI();
+</script>
+</body>
+</html>
